@@ -496,6 +496,36 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     
+    // Helpers JSON storage (démo)
+    function readUsers(){
+      try { return JSON.parse(localStorage.getItem('users') || '[]'); } catch(e){ return []; }
+    }
+    function saveUsers(users){
+      try { localStorage.setItem('users', JSON.stringify(users)); } catch(e){}
+    }
+    function setCurrentUser(user){
+      try {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('userRole', user.role);
+      } catch(e){}
+    }
+    function emailExists(email){
+      const users = readUsers();
+      return users.some(u => (u.email||'').toLowerCase() === email.toLowerCase());
+    }
+    async function createUser(user){
+      // call API (and keep local mirror for offline behavior)
+      try {
+        const res = await fetch('api/register_user.php', { method:'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(user) });
+        const data = await res.json();
+        if(!res.ok || data.error){ throw new Error(data.error || 'Erreur serveur'); }
+      } catch(e){ console.warn('API register failed, fallback local only:', e.message); }
+      const users = readUsers();
+      users.push(user);
+      saveUsers(users);
+      setCurrentUser(user);
+    }
+
     // Gestion du choix du type de compte
     const touristBtn = document.getElementById('touristBtn');
     const familyBtn = document.getElementById('familyBtn');
@@ -549,26 +579,50 @@
     });
     
     // Gestion de la soumission des formulaires
-    document.getElementById('touristForm').addEventListener('submit', function(e) {
+    document.getElementById('touristForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      // Ici vous ajouteriez votre logique d'inscription touriste
-      document.getElementById('step3').classList.add('active');
-      document.getElementById('step2').classList.add('completed');
-      
-      // Afficher un message de succès (simulation)
+      const firstName = document.getElementById('tFirstName').value.trim();
+      const lastName = document.getElementById('tLastName').value.trim();
+      const email = document.getElementById('tEmail').value.trim();
+      const password = document.getElementById('tPassword').value;
+      const confirm = document.getElementById('tConfirmPassword').value;
+      const phone = document.getElementById('tPhone').value.trim();
+      const country = document.getElementById('tCountry').value;
+      if(password !== confirm){ alert('Les mots de passe ne correspondent pas.'); return; }
+      if(emailExists(email)){ alert('Un compte existe déjà avec cet email.'); return; }
+      const user = {
+        id: Date.now(),
+        role: 'tourist',
+        firstName, lastName, email, password, phone, country,
+        createdAt: new Date().toISOString()
+      };
+      await createUser(user);
       alert('Compte touriste créé avec succès !');
-      window.location.href = 'tourist-dashboard.html';
+      window.location.href = 'admin-dashbord/touristes.html';
     });
     
-    document.getElementById('familyForm').addEventListener('submit', function(e) {
+    document.getElementById('familyForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      // Ici vous ajouteriez votre logique d'inscription famille
-      document.getElementById('step3').classList.add('active');
-      document.getElementById('step2').classList.add('completed');
-      
-      // Afficher un message de succès (simulation)
-      alert('Compte famille créé avec succès ! Un modérateur validera votre profil sous 48h.');
-      window.location.href = 'family-dashboard.html';
+      const firstName = document.getElementById('fFirstName').value.trim();
+      const lastName = document.getElementById('fLastName').value.trim();
+      const email = document.getElementById('fEmail').value.trim();
+      const password = document.getElementById('fPassword').value;
+      const confirm = document.getElementById('fConfirmPassword').value;
+      const phone = document.getElementById('fPhone').value.trim();
+      const location = document.getElementById('fLocation').value;
+      const address = document.getElementById('fAddress').value.trim();
+      if(password !== confirm){ alert('Les mots de passe ne correspondent pas.'); return; }
+      if(emailExists(email)){ alert('Un compte existe déjà avec cet email.'); return; }
+      const user = {
+        id: Date.now(),
+        role: 'family',
+        firstName, lastName, email, password, phone,
+        location, address,
+        createdAt: new Date().toISOString()
+      };
+      await createUser(user);
+      alert('Compte famille créé avec succès !');
+      window.location.href = 'admin-dashbord/familles.html';
     });
   </script>
 </body>

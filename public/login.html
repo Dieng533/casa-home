@@ -314,6 +314,29 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     
+    // Helpers JSON storage (démo)
+    async function apiLogin(email, password){
+      try {
+        const res = await fetch('api/login_user.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
+        const data = await res.json();
+        if(!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+        return data.user;
+      } catch(e){ return null; }
+    }
+    function readUsers(){
+      try { return JSON.parse(localStorage.getItem('users') || '[]'); } catch(e){ return []; }
+    }
+    function setCurrentUser(user){
+      try {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('userRole', user.role);
+      } catch(e){}
+    }
+    function findUserByEmail(email){
+      const users = readUsers();
+      return users.find(u => (u.email||'').toLowerCase() === email.toLowerCase());
+    }
+    
     // Gestion du choix du type d'utilisateur
     const touristBtn = document.getElementById('touristBtn');
     const familyBtn = document.getElementById('familyBtn');
@@ -332,20 +355,31 @@
     });
     
     // Gestion de la soumission du formulaire
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      let user = await apiLogin(email, password);
+      if(!user){
+        // fallback local if API not available
+        const local = findUserByEmail(email);
+        if(!local || local.password !== password){ alert('Identifiants invalides.'); return; }
+        user = { ...local };
+        delete user.password;
+      }
+      // Synchroniser avec le rôle enregistré du compte
+      userType = user.role || userType;
+      setCurrentUser(user);
       
-      // Ici vous ajouteriez votre logique de connexion
-      // avec une distinction entre touristes et familles
-      console.log('Type de compte:', userType);
-      // Persist role for access guards
-      try { localStorage.setItem('userRole', userType); } catch(_) {}
-      
-      // Redirection en fonction du type d'utilisateur
+      // Redirection en fonction du rôle
       if (userType === 'tourist') {
         window.location.href = 'admin-dashbord/touristes.html';
-      } else {
+      } else if (userType === 'family') {
         window.location.href = 'admin-dashbord/familles.html';
+      } else if (userType === 'admin') {
+        window.location.href = 'admin-dashbord/admin.html';
+      } else {
+        window.location.href = '../index.html';
       }
     });
   </script>

@@ -152,14 +152,14 @@
         <div class="card section-card mb-4">
           <div class="card-body">
             <h2 class="h5 section-title mb-3">Photos</h2>
-            <form class="row g-3" enctype="multipart/form-data">
+            <form id="formPhotos" class="row g-3" enctype="multipart/form-data">
               <div class="col-12">
-                <input class="form-control" type="file" multiple>
+                <input class="form-control" type="file" name="photos[]" id="photos" multiple accept="image/png,image/jpeg">
                 <div class="form-text">Téléversez quelques photos de votre hébergement (JPG/PNG).</div>
               </div>
               <div class="col-12 d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary" disabled>Téléverser (démo)</button>
-                <button type="button" class="btn btn-primary" disabled>Publier (démo)</button>
+                <button type="button" class="btn btn-outline-secondary" id="uploadBtn">Téléverser</button>
+                <button type="button" class="btn btn-primary" id="publishBtn">Publier</button>
               </div>
             </form>
           </div>
@@ -197,7 +197,95 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Helpers for listings
+    function readListings(){
+      try { return JSON.parse(localStorage.getItem('familyListings') || '[]'); } catch(e){ return []; }
+    }
+    function saveListings(list){
+      try { localStorage.setItem('familyListings', JSON.stringify(list)); } catch(e){}
+    }
+    function getCurrentUser(){
+      try { return JSON.parse(localStorage.getItem('currentUser')||'null'); } catch(e){ return null; }
+    }
+    function collectFormData(){
+      const profil = new FormData(document.getElementById('formProfil'));
+      const heb = new FormData(document.getElementById('formHebergement'));
+      const disp = new FormData(document.getElementById('formDisponibilites'));
+      const data = {
+        nomFamille: profil.get('nomFamille')?.trim(),
+        localisation: profil.get('localisation')?.trim(),
+        presentation: profil.get('presentation')?.trim() || '',
+        capacite: heb.get('capacite') ? parseInt(heb.get('capacite'),10) : null,
+        equipements: heb.get('equipements')?.trim() || '',
+        activites: heb.get('activites')?.trim() || '',
+        dateDebut: disp.get('dateDebut') || '',
+        dateFin: disp.get('dateFin') || '',
+        tarif: disp.get('tarif') ? parseInt(disp.get('tarif'),10) : null,
+        conditions: disp.get('conditions')?.trim() || ''
+      };
+      return data;
+    }
+    function validateData(d){
+      if(!d.nomFamille) return 'Nom de famille requis';
+      if(!d.localisation) return 'Localisation requise';
+      if(!d.capacite || d.capacite < 1) return 'Capacité invalide';
+      if(!d.tarif || d.tarif < 0) return 'Tarif invalide';
+      if(!d.dateDebut) return 'Date de disponibilité requise';
+      return '';
+    }
+    function buildPayload(){
+      const user = getCurrentUser();
+      const data = collectFormData();
+      const err = validateData(data);
+      if(err){ return { error: err }; }
+      const listing = {
+        id: Date.now(),
+        ownerEmail: user?.email || null,
+        rating: 0, reviews: 0,
+        ...data
+      };
+      return { listing, user };
+    }
+
+    async function uploadToServer(includePhotos){
+      const payload = buildPayload();
+      if(payload.error){ alert(payload.error); return; }
+      const { listing, user } = payload;
+      const form = new FormData();
+      Object.keys(listing).forEach(k => {
+        if (listing[k] !== null && listing[k] !== undefined) form.append(k, listing[k]);
+      });
+      if (includePhotos) {
+        const files = document.getElementById('photos').files;
+        for (let i=0;i<files.length;i++) form.append('photos[]', files[i]);
+      }
+      try {
+        const res = await fetch('../api/upload_listing.php', { method:'POST', body: form });
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+        // Also sync localStorage for offline listing display
+        const list = readListings();
+        const idx = list.findIndex(x => user && x.ownerEmail && x.ownerEmail === user.email);
+        const firstImage = (data.listing.images && data.listing.images[0]) ? ('../' + data.listing.images[0]) : '../public/assets/images/placeholder.jpg';
+        const local = { ...listing, image: firstImage };
+        if(idx >= 0){ list[idx] = { ...list[idx], ...local }; }
+        else { list.push(local); }
+        saveListings(list);
+        alert('Votre annonce a été publiée avec succès.');
+      } catch (e) {
+        console.error(e);
+        alert('Échec de publication: ' + e.message);
+      }
+    }
+
+    function publish(){
+      uploadToServer(true);
+    }
+    document.getElementById('publishBtn').addEventListener('click', publish);
+    document.getElementById('uploadBtn').addEventListener('click', function(){ uploadToServer(true); });
+  </script>
 </body>
 </html>
 
