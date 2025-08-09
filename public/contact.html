@@ -3,22 +3,174 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Casa Home - Contact</title>
+  <title>Contact - Casa Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="assets/css/styles.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+      position: relative;
+      padding: 8px 12px !important;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background-color: var(--primary-blue);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Styles spécifiques à la page contact */
+    .contact-hero {
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('assets/images/casa2.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .contact-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      background-color: var(--primary-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .contact-form {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 2rem;
+    }
+    
+    .form-control, .form-select {
+      padding: 0.75rem 1rem;
+    }
+    
+    textarea.form-control {
+      min-height: 150px;
+    }
+    
+    .map-container {
+      height: 100%;
+      min-height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-branding">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Casa Home</a>
+      <a class="navbar-brand" href="../index.html">
+        <img src="assets/images/logo_casahome.png" alt="Casa Home Logo">
+        Casa Home
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="families.html">Familles</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="search.html">Recherche</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#services">Services</a></li>
           <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
         </ul>
         <div class="d-flex">
@@ -30,40 +182,220 @@
   </nav>
 
   <main class="container py-4">
-    <h1 class="h3 mb-3">Nous contacter</h1>
-    <form class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label">Nom</label>
-        <input type="text" class="form-control" />
+    <!-- Hero Section -->
+    <div class="contact-hero">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="fw-bold mb-3">Contactez-nous</h1>
+          <p class="lead mb-4">Nous sommes là pour répondre à vos questions et vous aider à organiser votre séjour en Casamance.</p>
+        </div>
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" />
+    </div>
+
+    <div class="row g-4 mb-5">
+      <!-- Carte Contact 1 -->
+      <div class="col-md-4">
+        <div class="contact-card h-100 p-4 text-center">
+          <div class="contact-icon mx-auto">
+            <i class="bi bi-telephone"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Par téléphone</h5>
+          <p class="mb-2">Disponible du lundi au vendredi</p>
+          <p class="h5">+221 33 123 45 67</p>
+          <p class="small text-muted mt-2">9h-18h (GMT)</p>
+        </div>
       </div>
+      
+      <!-- Carte Contact 2 -->
+      <div class="col-md-4">
+        <div class="contact-card h-100 p-4 text-center">
+          <div class="contact-icon mx-auto">
+            <i class="bi bi-envelope"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Par email</h5>
+          <p class="mb-3">Réponse sous 24h</p>
+          <a href="mailto:contact@casahome.sn" class="btn btn-outline-primary">contact@casahome.sn</a>
+        </div>
+      </div>
+      
+      <!-- Carte Contact 3 -->
+      <div class="col-md-4">
+        <div class="contact-card h-100 p-4 text-center">
+          <div class="contact-icon mx-auto">
+            <i class="bi bi-chat-dots"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Chat en direct</h5>
+          <p class="mb-3">Disponible 7j/7</p>
+          <a href="#" class="btn btn-primary">Ouvrir le chat</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Formulaire de contact -->
+      <div class="col-lg-7">
+        <div class="contact-form h-100">
+          <h3 class="fw-bold mb-4">Envoyez-nous un message</h3>
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="firstName" required>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="lastName" required>
+              </div>
+            </div>
+            
+            <div class="mb-3 mt-3">
+              <label for="email" class="form-label">Adresse email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="subject" class="form-label">Sujet</label>
+              <select class="form-select" id="subject" required>
+                <option value="" selected disabled>Sélectionnez un sujet</option>
+                <option>Demande d'information</option>
+                <option>Problème technique</option>
+                <option>Demande de partenariat</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control" id="message" required></textarea>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="newsletter" checked>
+              <label class="form-check-label" for="newsletter">Recevoir la newsletter</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary px-4 py-2">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Carte et adresse -->
+      <div class="col-lg-5">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-0">
+            <div class="map-container">
+              <!-- Intégration de la carte (ex: Google Maps) -->
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.274346011854!2d-16.26655742557835!3d12.5641531236816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee79110d8ab3a63%3A0x156053c2df89f524!2sBignona!5e0!3m2!1sfr!2ssn!4v1754752654787!5m2!1sfr!2ssn" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
+          </div>
+          <div class="card-footer bg-white">
+            <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Notre adresse</h5>
+            <p class="mb-1">123 Avenue de Casamance</p>
+            <p class="mb-1">BP 1234, Ziguinchor</p>
+            <p>Sénégal</p>
+            
+            <h5 class="fw-bold mb-3 mt-4"><i class="bi bi-clock-fill text-primary me-2"></i>Horaires</h5>
+            <p class="mb-1"><strong>Lun-Ven:</strong> 9h-18h</p>
+            <p><strong>Sam:</strong> 10h-15h</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="row mt-5">
       <div class="col-12">
-        <label class="form-label">Message</label>
-        <textarea class="form-control" rows="5"></textarea>
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h3 class="fw-bold mb-4"><i class="bi bi-question-circle-fill text-primary me-2"></i>Questions fréquentes</h3>
+            
+            <div class="accordion" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeadingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="true" aria-controls="faqCollapseOne">
+                    Comment fonctionne l'hébergement chez l'habitant ?
+                  </button>
+                </h2>
+                <div id="faqCollapseOne" class="accordion-collapse collapse show" aria-labelledby="faqHeadingOne" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Vous choisissez une famille selon vos préférences. Nous facilitons la mise en relation et vous recevez toutes les informations pratiques pour préparer votre séjour.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeadingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo">
+                    Les paiements sont-ils sécurisés ?
+                  </button>
+                </h2>
+                <div id="faqCollapseTwo" class="accordion-collapse collapse" aria-labelledby="faqHeadingTwo" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Oui, nous utilisons des prestataires de paiement reconnus qui respectent les normes de sécurité les plus strictes.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeadingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree">
+                    Puis-je annuler ou modifier mon séjour ?
+                  </button>
+                </h2>
+                <div id="faqCollapseThree" class="accordion-collapse collapse" aria-labelledby="faqHeadingThree" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Les conditions d'annulation varient selon la famille d'accueil. Contactez-nous pour toute demande de modification ou d'annulation.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-12">
-        <button type="button" class="btn btn-primary"><i class="bi bi-send me-2"></i>Envoyer</button>
-      </div>
-    </form>
+    </div>
+
   </main>
 
-  <footer class="site-footer mt-5 py-4">
-    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-      <div>&copy; <span id="year"></span> Casa Home</div>
-      <div class="d-flex gap-3">
-        <a href="contact.html">Contact</a>
-        <a href="#">Mentions légales</a>
-        <a href="#">Politique de confidentialité</a>
+  <footer class="site-footer mt-5">
+    <div class="container py-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>&copy; <span id="year"></span> Casa Home</div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <a href="contact.html">Contact</a>
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Validation simple du formulaire
+    (function() {
+      const form = document.querySelector('.contact-form form');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const required = form.querySelectorAll('[required]');
+        let valid = true;
+        required.forEach(el => {
+          if (!el.value.trim()) {
+            el.classList.add('is-invalid');
+            valid = false;
+          } else {
+            el.classList.remove('is-invalid');
+          }
+        });
+        if (valid) {
+          const btn = form.querySelector('button[type="submit"]');
+          if (btn) btn.disabled = true;
+          alert('Merci, votre message a été envoyé.');
+          form.reset();
+          if (btn) btn.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
-
-
