@@ -338,12 +338,14 @@
       // Ici vous ajouteriez votre logique de connexion
       // avec une distinction entre touristes et familles
       console.log('Type de compte:', userType);
+      // Persist role for access guards
+      try { localStorage.setItem('userRole', userType); } catch(_) {}
       
       // Redirection en fonction du type d'utilisateur
       if (userType === 'tourist') {
-        window.location.href = 'tourist-dashboard.html';
+        window.location.href = 'admin-dashbord/touristes.html';
       } else {
-        window.location.href = 'family-dashboard.html';
+        window.location.href = 'admin-dashbord/familles.html';
       }
     });
   </script>

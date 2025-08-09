@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Espace Touriste - Casa Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="../assets/images/logo_casahome.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary-blue:#2AA4CD; --primary-orange:#EB6F27; }
+    body { font-family:'Poppins',sans-serif; }
+    .navbar-branding { background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .section-card { border:none; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.06); }
+    .badge-status { font-size:.75rem; }
+  </style>
+</head>
+<body>
+  <script>
+    // Access guard: only 'tourist' role can view this page
+    (function(){
+      try {
+        const role = localStorage.getItem('userRole');
+        if (role !== 'tourist') {
+          window.location.replace('../login.html');
+        }
+      } catch(_) {}
+    })();
+  </script>
+  <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="../../index.html">
+        <img src="../assets/images/logo_casahome.png" alt="Casa Home" height="48">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="familles.html">Espace Famille</a></li>
+          <li class="nav-item"><a class="nav-link active" href="touristes.html">Espace Touriste</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin.html">Admin Entreprise</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-primary" href="../login.html">Connexion</a>
+          <a class="btn btn-primary" href="../register.html">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="mb-4 p-4 bg-light rounded-3">
+      <h1 class="h3 mb-1">Espace Touriste</h1>
+      <p class="mb-0 text-muted">Consultez vos familles réservées et suivez vos réservations.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card section-card">
+          <div class="card-body">
+            <h2 class="h6 text-uppercase text-muted">Mes chiffres</h2>
+            <div class="row text-center mt-3">
+              <div class="col-6">
+                <div class="fw-bold fs-4" id="countEnCours">0</div>
+                <div class="text-muted small">En cours</div>
+              </div>
+              <div class="col-6">
+                <div class="fw-bold fs-4" id="countConfirmees">0</div>
+                <div class="text-muted small">Confirmées</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card section-card">
+          <div class="card-body">
+            <h2 class="h5 mb-3">Mes réservations</h2>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>Famille</th>
+                    <th>Période</th>
+                    <th>Statut</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="reservationsBody">
+                  <!-- Rempli en JS (démo) -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-5" style="background:#2AA4CD;color:#fff;">
+    <div class="container py-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
+      <div>&copy; <span id="year"></span> Casa Home</div>
+      <div class="d-flex gap-3">
+        <a class="text-white text-decoration-none" href="../../index.html">Accueil</a>
+        <a class="text-white text-decoration-none" href="../contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const demoReservations = [
+      { famille:'Famille Diatta', debut:'2025-08-12', fin:'2025-08-18', statut:'En attente' },
+      { famille:'Famille Sané', debut:'2025-09-05', fin:'2025-09-10', statut:'Confirmée' }
+    ];
+    function badgeFor(status){
+      const map={ 'En attente':'warning', 'Confirmée':'success', 'Annulée':'secondary' };
+      const color = map[status] || 'light';
+      return `<span class="badge bg-${color} badge-status">${status}</span>`;
+    }
+    function render(){
+      const body = document.getElementById('reservationsBody');
+      body.innerHTML = '';
+      let enCours = 0, confirmees = 0;
+      demoReservations.forEach((r,i)=>{
+        if(r.statut==='En attente') enCours++; if(r.statut==='Confirmée') confirmees++;
+        body.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${r.famille}</td>
+            <td><i class="bi bi-calendar3 me-1"></i>${r.debut} → ${r.fin}</td>
+            <td>${badgeFor(r.statut)}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary me-2" onclick="alert('Détails de ${r.famille}');">Détails</button>
+              ${r.statut==='En attente' ? `<button class="btn btn-sm btn-primary" onclick="confirmer(${i})">Confirmer</button>` : ''}
+            </td>
+          </tr>`);
+      });
+      document.getElementById('countEnCours').textContent = enCours;
+      document.getElementById('countConfirmees').textContent = confirmees;
+    }
+    function confirmer(idx){ demoReservations[idx].statut='Confirmée'; render(); }
+    render();
+  </script>
+</body>
+</html>
+
+
