@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Casa Home - Tourisme communautaire en Casamance</title>
+  <meta name="description" content="Plateforme de tourisme communautaire et solidaire en Casamance. Vivez une expérience immersive chez l'habitant.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary-blue) !important;
+    }
+    
+   .navbar-brand img {
+      height: 60px;
+      margin-right: 10px;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background-color: var(--primary-blue);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+    
+    .hero {
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('public/assets/images/hero-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      color: white;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .service-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .service-card .card-body {
+      padding: 1.5rem;
+    }
+    
+    .service-card .card-title {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      padding: 15px 20px;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      max-width: 80%;
+    }
+    
+    .carousel-item img {
+      height: 400px;
+      object-fit: cover;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .testimonial-section {
+      background-color: var(--light-blue);
+      padding: 4rem 0;
+      margin: 4rem 0;
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .testimonial-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 3px solid var(--primary-blue);
+    }
+    
+    .rating {
+      color: var(--primary-orange);
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .carousel-item img {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">
+        <img src="./public/assets/images/logo_casahome.png" alt="Casa Home Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="public/families.html">Familles</a></li>
+          <li class="nav-item"><a class="nav-link" href="public/search.html">Recherche</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="public/contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex">
+          <a class="btn btn-outline-primary" href="public/login.html">Connexion</a>
+          <a class="btn btn-primary ms-2" href="public/register.html">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <!-- Hero Section -->
+    <section class="p-5 mb-4 hero rounded-4 overflow-hidden">
+      <div class="container py-5">
+        <div class="row align-items-center">
+          <div class="col-lg-7">
+            <h1 class="display-4 fw-bold mb-3">Découvrez la Casamance authentique</h1>
+            <p class="lead mb-4">Plateforme de tourisme communautaire et solidaire. Vivez une expérience immersive chez l'habitant et participez au développement local.</p>
+            <div class="d-flex gap-3">
+              <a href="#services" class="btn btn-primary btn-lg px-4"><i class="bi bi-map me-2"></i>Explorer</a>
+              <a href="public/families.html" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-people me-2"></i>Rencontrer les familles</a>
+            </div>
+          </div>
+          <div class="col-lg-5 d-none d-lg-block">
+            <img src="public/assets/images/1.jpg" alt="Voyage en Casamance" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Carousel Section -->
+    <section id="homeCarousel" class="carousel slide mb-5 shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="public/assets/images/casa1.png" class="d-block w-100" alt="Casamance 1" />
+          <div class="carousel-caption">
+            <h5 class="fw-bold fs-4">Découvrir la Casamance</h5>
+            <p class="mb-0 d-none d-md-block">Nature préservée, hospitalité légendaire et traditions vivantes.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="public/assets/images/casa2.png" class="d-block w-100" alt="Casamance 2" />
+          <div class="carousel-caption">
+            <h5 class="fw-bold fs-4">Familles chaleureuses</h5>
+            <p class="mb-0 d-none d-md-block">Séjours authentiques chez l'habitant pour une immersion totale.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="public/assets/images/casa3.png" class="d-block w-100" alt="Casamance 3" />
+          <div class="carousel-caption">
+            <h5 class="fw-bold fs-4">Culture et traditions</h5>
+            <p class="mb-0 d-none d-md-block">Rencontres enrichissantes et savoir-faire locaux à partager.</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Précédent</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Suivant</span>
+      </button>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="mt-5 mb-5">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold mb-3">Nos services</h2>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">Découvrez une expérience de voyage unique qui profite directement aux communautés locales</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card h-100 service-card">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-house-heart-fill text-primary" style="font-size: 2rem;"></i>
+              </div>
+              <h5 class="card-title">Hébergement chez l'habitant</h5>
+              <p class="card-text text-muted">Séjournez dans des familles locales pour une immersion authentique dans la culture casamançaise.</p>
+              <a href="public/families.html" class="btn btn-outline-primary mt-3">Découvrir</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card h-100 service-card">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-compass-fill text-primary" style="font-size: 2rem;"></i>
+              </div>
+              <h5 class="card-title">Guides locaux</h5>
+              <p class="card-text text-muted">Explorez la région avec des guides passionnés qui partageront leurs connaissances et leurs histoires.</p>
+              <a href="public/search.html" class="btn btn-outline-primary mt-3">En savoir plus</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card h-100 service-card">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-binoculars-fill text-primary" style="font-size: 2rem;"></i>
+              </div>
+              <h5 class="card-title">Excursions et activités</h5>
+              <p class="card-text text-muted">Balades en pirogue, randonnées, visites culturelles et ateliers artisanaux.</p>
+              <a href="public/search.html" class="btn btn-outline-primary mt-3">Voir les options</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card h-100 service-card">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-emoji-smile-fill text-primary" style="font-size: 2rem;"></i>
+              </div>
+              <h5 class="card-title">Culture et gastronomie</h5>
+              <p class="card-text text-muted">Partagez des repas traditionnels et découvrez les savoir-faire locaux avec vos hôtes.</p>
+              <a href="public/contact.html" class="btn btn-outline-primary mt-3">Nous contacter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonial-section rounded-4">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Ils ont vécu l'expérience</h2>
+          <p class="lead text-muted">Découvrez ce que nos voyageurs pensent de leur séjour</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="testimonial-card h-100 text-center">
+              <img src="public/assets/images/testimonial1.jpg" alt="Marie D." class="img-fluid">
+              <div class="rating">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <p class="mb-3">"Une expérience incroyable avec la famille Diatta. J'ai découvert une culture riche et des paysages à couper le souffle."</p>
+              <h5 class="mb-1">Marie D.</h5>
+              <p class="text-muted small">Paris, France</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card h-100 text-center">
+              <img src="public/assets/images/testimonial2.jpg" alt="Thomas L." class="img-fluid">
+              <div class="rating">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <p class="mb-3">"Le tourisme communautaire change tout. Je me suis senti accueilli comme un membre de la famille. À refaire sans hésiter!"</p>
+              <h5 class="mb-1">Thomas L.</h5>
+              <p class="text-muted small">Bruxelles, Belgique</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card h-100 text-center">
+              <img src="public/assets/images/testimonial3.jpg" alt="Amina S." class="img-fluid">
+              <div class="rating">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-half"></i>
+              </div>
+              <p class="mb-3">"La Casamance est magnifique, mais ce sont les rencontres avec les habitants qui ont rendu ce voyage inoubliable."</p>
+              <h5 class="mb-1">Amina S.</h5>
+              <p class="text-muted small">Montréal, Canada</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="my-5 py-5 text-center bg-light rounded-4">
+      <div class="container">
+        <h2 class="fw-bold mb-4">Prêt à vivre l'aventure ?</h2>
+        <p class="lead mb-4">Rejoignez notre communauté de voyageurs et découvrez la Casamance autrement</p>
+        <a href="public/register.html" class="btn btn-primary btn-lg px-5"><i class="bi bi-person-plus me-2"></i>S'inscrire maintenant</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h3 class="h5 mb-3"><i class="bi bi-house-heart me-2"></i>Casa Home</h3>
+          <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+          <div class="mt-4">
+            <a href="#" class="text-white me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Navigation</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="index.html">Accueil</a></li>
+            <li class="mb-2"><a href="public/families.html">Familles</a></li>
+            <li class="mb-2"><a href="public/search.html">Recherche</a></li>
+            <li class="mb-2"><a href="#services">Services</a></li>
+            <li class="mb-2"><a href="public/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Informations</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">À propos</a></li>
+            <li class="mb-2"><a href="#">Comment ça marche</a></li>
+            <li class="mb-2"><a href="#">Blog</a></li>
+            <li class="mb-2"><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="h6 mb-3">Légal</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">Conditions générales</a></li>
+            <li class="mb-2"><a href="#">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="#">Mentions légales</a></li>
+            <li class="mb-2"><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Animation for service cards on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const serviceCards = document.querySelectorAll('.service-card');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      serviceCards.forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Familles d'accueil - Casa Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand img {
+      height: 60px;
+      margin-right: 10px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+      position: relative;
+      padding: 8px 12px !important;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background-color: var(--primary-blue);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Styles spécifiques à la page familles */
+    .family-card {
+      transition: transform 0.3s ease;
+      border-radius: 10px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .family-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .family-img {
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .badge-capacity {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .filter-section {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    
+    .view-more-btn {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+    }
+    
+    .rating {
+      color: var(--primary-orange);
+    }
+    
+    .page-hero {
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../assets/images/families-hero.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      color: white;
+      padding: 4rem 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .page-hero h1 {
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .page-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation cohérente avec l'accueil -->
+  <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">
+        <img src="assets/images/logo_casahome.png" alt="Casa Home Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="families.html">Familles</a></li>
+          <li class="nav-item"><a class="nav-link" href="search.html">Recherche</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex">
+          <a class="btn btn-outline-primary" href="login.html">Connexion</a>
+          <a class="btn btn-primary ms-2" href="register.html">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <!-- Hero Section -->
+    <div class="page-hero">
+      <h1 class="fw-bold mb-3">Nos familles d'accueil</h1>
+      <p class="lead">Découvrez nos familles partenaires en Casamance et vivez une expérience authentique chez l'habitant</p>
+    </div>
+
+    <div class="row">
+      <!-- Filtres -->
+      <div class="col-lg-3 mb-4">
+        <div class="filter-section sticky-top" style="top: 20px;">
+          <h5 class="mb-3 fw-bold">Filtrer les résultats</h5>
+          
+          <div class="mb-4">
+            <label for="location" class="form-label">Localisation</label>
+            <select class="form-select" id="location">
+              <option selected>Toutes les régions</option>
+              <option>Ziguinchor</option>
+              <option>Oussouye</option>
+              <option>Cap Skirring</option>
+              <option>Kolda</option>
+              <option>Sédhiou</option>
+            </select>
+          </div>
+          
+          <div class="mb-4">
+            <label for="capacity" class="form-label">Capacité d'accueil</label>
+            <select class="form-select" id="capacity">
+              <option selected>Toutes capacités</option>
+              <option>1-2 personnes</option>
+              <option>3-4 personnes</option>
+              <option>5+ personnes</option>
+            </select>
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">Équipements</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="equipment1">
+              <label class="form-check-label" for="equipment1">Salle de bain privée</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="equipment2">
+              <label class="form-check-label" for="equipment2">Climatisation</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="equipment3">
+              <label class="form-check-label" for="equipment3">Wi-Fi</label>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">Activités proposées</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="activity1">
+              <label class="form-check-label" for="activity1">Cuisine locale</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="activity2">
+              <label class="form-check-label" for="activity2">Visite village</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="activity3">
+              <label class="form-check-label" for="activity3">Atelier artisanat</label>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary w-100">Appliquer les filtres</button>
+        </div>
+      </div>
+      
+      <!-- Liste des familles -->
+      <div class="col-lg-9">
+        <div class="row g-4">
+          <!-- Famille 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/3.jpg" class="card-img-top family-img" alt="Famille Diatta">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Diatta</h5>
+                  <span class="badge badge-capacity">4 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Ziguinchor, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-half"></i>
+                  <span class="text-muted small ms-1">(12 avis)</span>
+                </div>
+                <p class="card-text">La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie.</p>
+                <a href="family-details.html?id=1" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Famille 2 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/6.jpg" class="card-img-top family-img" alt="Famille Sane">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Sané</h5>
+                  <span class="badge badge-capacity">2 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Cap Skirring, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <span class="text-muted small ms-1">(8 avis)</span>
+                </div>
+                <p class="card-text">Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité.</p>
+                <a href="family-details.html?id=2" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Famille 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/4.jpg" class="card-img-top family-img" alt="Famille Badji">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Badji</h5>
+                  <span class="badge badge-capacity">6 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Oussouye, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star"></i>
+                  <span class="text-muted small ms-1">(5 avis)</span>
+                </div>
+                <p class="card-text">Grande famille traditionnelle proposant des activités culturelles et des repas typiques.</p>
+                <a href="family-details.html?id=3" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Famille 4 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/casa2.png" class="card-img-top family-img" alt="Famille Mané">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Mané</h5>
+                  <span class="badge badge-capacity">3 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Kolda, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-half"></i>
+                  <span class="text-muted small ms-1">(7 avis)</span>
+                </div>
+                <p class="card-text">Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt.</p>
+                <a href="family-details.html?id=4" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Famille 5 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/8.jpg" class="card-img-top family-img" alt="Famille Diédhiou">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Diédhiou</h5>
+                  <span class="badge badge-capacity">5 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Sédhiou, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <span class="text-muted small ms-1">(10 avis)</span>
+                </div>
+                <p class="card-text">Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove.</p>
+                <a href="family-details.html?id=5" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Famille 6 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card family-card h-100">
+              <img src="../public/assets/images/5.jpg" class="card-img-top family-img" alt="Famille Coly">
+              <div class="card-body position-relative pb-5">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-0">Famille Coly</h5>
+                  <span class="badge badge-capacity">4 personnes</span>
+                </div>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> Ziguinchor, Casamance</p>
+                <div class="rating mb-2">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star"></i>
+                  <span class="text-muted small ms-1">(6 avis)</span>
+                </div>
+                <p class="card-text">Famille jeune et dynamique proposant des activités sportives et culturelles.</p>
+                <a href="family-details.html?id=6" class="btn btn-outline-primary view-more-btn">Voir plus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pagination -->
+        <nav class="mt-5" aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Précédent</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Suivant</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    
+    <!-- CTA Inscription -->
+    <div class="row mt-5">
+      <div class="col-12 text-center py-5 bg-light rounded-3">
+        <h3 class="mb-3">Prêt à réserver votre séjour ?</h3>
+        <p class="lead mb-4">Créez un compte pour contacter les familles et organiser votre voyage</p>
+        <a href="register.html" class="btn btn-primary btn-lg px-4"><i class="bi bi-person-plus me-2"></i>S'inscrire maintenant</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer cohérent avec l'accueil -->
+  <footer class="site-footer">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h3 class="h5 mb-3"><img src="../assets/images/logo_casahome.png" alt="Casa Home Logo" height="30" class="me-2">Casa Home</h3>
+          <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+          <div class="mt-4">
+            <a href="#" class="text-white me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Navigation</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="../index.html">Accueil</a></li>
+            <li class="mb-2"><a href="families.html">Familles</a></li>
+            <li class="mb-2"><a href="search.html">Recherche</a></li>
+            <li class="mb-2"><a href="../index.html#services">Services</a></li>
+            <li class="mb-2"><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Informations</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">À propos</a></li>
+            <li class="mb-2"><a href="#">Comment ça marche</a></li>
+            <li class="mb-2"><a href="#">Blog</a></li>
+            <li class="mb-2"><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="h6 mb-3">Légal</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">Conditions générales</a></li>
+            <li class="mb-2"><a href="#">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="#">Mentions légales</a></li>
+            <li class="mb-2"><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Gestion de l'affichage des détails de famille avec connexion requise
+    document.querySelectorAll('.view-more-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // Vérifier si l'utilisateur est connecté (à implémenter avec votre logique réelle)
+        const isLoggedIn = false; // À remplacer par votre vérification
+        
+        if (!isLoggedIn) {
+          e.preventDefault();
+          // Afficher une modal demandant la connexion
+          const modal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+          modal.show();
+        }
+      });
+    });
+  </script>
+  
+  <!-- Modal Connexion Requise -->
+  <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginRequiredModalLabel">Connexion requise</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Pour voir les détails complets des familles et pouvoir les contacter, vous devez avoir un compte.</p>
+          <p>Souhaitez-vous vous connecter ou créer un compte maintenant ?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Plus tard</button>
+          <a href="login.html" class="btn btn-outline-primary">Se connecter</a>
+          <a href="register.html" class="btn btn-primary">S'inscrire</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

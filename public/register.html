@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inscription - Casa Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+      position: relative;
+      padding: 8px 12px !important;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background-color: var(--primary-blue);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Styles spécifiques à la page register */
+    .register-container {
+      max-width: 1000px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .register-hero {
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../assets/images/register-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    
+    .user-type-btn {
+      border: 2px solid #dee2e6;
+      background: white;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+    
+    .user-type-btn:hover {
+      border-color: var(--primary-blue);
+    }
+    
+    .user-type-btn.active {
+      border-color: var(--primary-blue);
+      background-color: var(--light-blue);
+    }
+    
+    .user-type-btn i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary-blue);
+    }
+    
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    
+    .step {
+      text-align: center;
+      position: relative;
+      flex: 1;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background-color: #dee2e6;
+      color: #6c757d;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      font-weight: bold;
+    }
+    
+    .step.active .step-number {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .step.completed .step-number {
+      background-color: var(--primary-orange);
+      color: white;
+    }
+    
+    .step-text {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    
+    .step.active .step-text {
+      color: var(--primary-blue);
+      font-weight: 500;
+    }
+    
+    .step.completed .step-text {
+      color: var(--primary-orange);
+    }
+    
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 60%;
+      right: 0;
+      height: 2px;
+      background-color: #dee2e6;
+      z-index: -1;
+    }
+    
+    .step.completed:not(:last-child)::after {
+      background-color: var(--primary-orange);
+    }
+    
+    #familyForm, #touristForm {
+      display: none;
+    }
+    
+    .form-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation cohérente avec l'accueil -->
+  <nav class="navbar navbar-expand-lg navbar-branding">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">
+        <img src="../assets/images/logo_casahome.png" alt="Casa Home Logo">
+        Casa Home
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="families.html">Familles</a></li>
+          <li class="nav-item"><a class="nav-link" href="search.html">Recherche</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex">
+          <a class="btn btn-outline-primary" href="login.html">Connexion</a>
+          <a class="btn btn-primary ms-2" href="register.html">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <div class="register-container mx-auto">
+      <div class="row g-0">
+        <!-- Colonne de gauche (image) -->
+        <div class="col-lg-6 d-none d-lg-flex register-hero align-items-center">
+          <div class="p-5">
+            <h2 class="display-5 fw-bold mb-4">Rejoignez notre communauté</h2>
+            <p class="lead">Inscrivez-vous pour profiter de toutes les fonctionnalités de notre plateforme de tourisme solidaire.</p>
+            <div class="mt-4">
+              <a href="../index.html" class="btn btn-outline-light">En savoir plus sur Casa Home</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Colonne de droite (formulaire) -->
+        <div class="col-lg-6 bg-white p-5">
+          <div class="text-center mb-5">
+            <img src="../assets/images/logo_casahome.png" alt="Casa Home Logo" height="60" class="mb-3">
+            <h1 class="h3 fw-bold">Créer un compte</h1>
+            <p class="text-muted">Commencez par choisir votre type de compte</p>
+          </div>
+          
+          <!-- Indicateur d'étapes -->
+          <div class="step-indicator">
+            <div class="step active" id="step1">
+              <div class="step-number">1</div>
+              <div class="step-text">Type de compte</div>
+            </div>
+            <div class="step" id="step2">
+              <div class="step-number">2</div>
+              <div class="step-text">Informations</div>
+            </div>
+            <div class="step" id="step3">
+              <div class="step-number">3</div>
+              <div class="step-text">Confirmation</div>
+            </div>
+          </div>
+          
+          <!-- Choix du type de compte -->
+          <div id="accountTypeSelection">
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="user-type-btn active" id="touristBtn">
+                  <i class="bi bi-person"></i>
+                  <h5 class="fw-bold">Je suis touriste</h5>
+                  <p class="small text-muted">Je cherche un hébergement</p>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="user-type-btn" id="familyBtn">
+                  <i class="bi bi-people"></i>
+                  <h5 class="fw-bold">Je suis famille</h5>
+                  <p class="small text-muted">Je propose un hébergement</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid">
+              <button type="button" id="continueBtn" class="btn btn-primary">Continuer</button>
+            </div>
+            
+            <div class="divider">ou</div>
+            
+            <div class="text-center">
+              <p class="mb-3">Vous avez déjà un compte ?</p>
+              <a href="login.html" class="btn btn-outline-primary">Se connecter</a>
+            </div>
+          </div>
+          
+          <!-- Formulaire Touriste -->
+          <form id="touristForm" style="display: none;">
+            <h5 class="mb-4 fw-bold"><i class="bi bi-person me-2"></i>Informations touristes</h5>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="tFirstName" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="tFirstName" required>
+              </div>
+              <div class="col-md-6">
+                <label for="tLastName" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="tLastName" required>
+              </div>
+            </div>
+            
+            <div class="mb-3 mt-3">
+              <label for="tEmail" class="form-label">Adresse email</label>
+              <input type="email" class="form-control" id="tEmail" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="tPassword" class="form-label">Mot de passe</label>
+              <input type="password" class="form-control" id="tPassword" required>
+              <div class="form-text">Minimum 8 caractères avec chiffres et lettres</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="tConfirmPassword" class="form-label">Confirmer le mot de passe</label>
+              <input type="password" class="form-control" id="tConfirmPassword" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="tPhone" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="tPhone">
+            </div>
+            
+            <div class="mb-3">
+              <label for="tCountry" class="form-label">Pays de résidence</label>
+              <select class="form-select" id="tCountry" required>
+                <option value="" selected disabled>Sélectionnez votre pays</option>
+                <option>France</option>
+                <option>Sénégal</option>
+                <option>Belgique</option>
+                <option>Canada</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="tNewsletter" checked>
+              <label class="form-check-label" for="tNewsletter">Recevoir la newsletter avec des offres spéciales</label>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="tTerms" required>
+              <label class="form-check-label" for="tTerms">J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a></label>
+            </div>
+            
+            <div class="form-navigation">
+              <button type="button" class="btn btn-outline-secondary" id="tBackBtn">Retour</button>
+              <button type="submit" class="btn btn-primary">Créer mon compte</button>
+            </div>
+          </form>
+          
+          <!-- Formulaire Famille -->
+          <form id="familyForm" style="display: none;">
+            <h5 class="mb-4 fw-bold"><i class="bi bi-people me-2"></i>Informations famille</h5>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="fFirstName" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="fFirstName" required>
+              </div>
+              <div class="col-md-6">
+                <label for="fLastName" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="fLastName" required>
+              </div>
+            </div>
+            
+            <div class="mb-3 mt-3">
+              <label for="fEmail" class="form-label">Adresse email</label>
+              <input type="email" class="form-control" id="fEmail" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="fPassword" class="form-label">Mot de passe</label>
+              <input type="password" class="form-control" id="fPassword" required>
+              <div class="form-text">Minimum 8 caractères avec chiffres et lettres</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="fConfirmPassword" class="form-label">Confirmer le mot de passe</label>
+              <input type="password" class="form-control" id="fConfirmPassword" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="fPhone" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="fPhone" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="fLocation" class="form-label">Localisation en Casamance</label>
+              <select class="form-select" id="fLocation" required>
+                <option value="" selected disabled>Sélectionnez votre localisation</option>
+                <option>Ziguinchor</option>
+                <option>Oussouye</option>
+                <option>Cap Skirring</option>
+                <option>Kolda</option>
+                <option>Sédhiou</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="fAddress" class="form-label">Adresse complète</label>
+              <textarea class="form-control" id="fAddress" rows="2"></textarea>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="fTerms" required>
+              <label class="form-check-label" for="fTerms">J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a></label>
+            </div>
+            
+            <div class="form-navigation">
+              <button type="button" class="btn btn-outline-secondary" id="fBackBtn">Retour</button>
+              <button type="submit" class="btn btn-primary">Créer mon compte</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer cohérent avec l'accueil -->
+  <footer class="site-footer">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h3 class="h5 mb-3"><img src="../assets/images/logo_casahome.png" alt="Casa Home Logo" height="30" class="me-2">Casa Home</h3>
+          <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+          <div class="mt-4">
+            <a href="#" class="text-white me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Navigation</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="../index.html">Accueil</a></li>
+            <li class="mb-2"><a href="families.html">Familles</a></li>
+            <li class="mb-2"><a href="search.html">Recherche</a></li>
+            <li class="mb-2"><a href="../index.html#services">Services</a></li>
+            <li class="mb-2"><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Informations</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">À propos</a></li>
+            <li class="mb-2"><a href="#">Comment ça marche</a></li>
+            <li class="mb-2"><a href="#">Blog</a></li>
+            <li class="mb-2"><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="h6 mb-3">Légal</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">Conditions générales</a></li>
+            <li class="mb-2"><a href="#">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="#">Mentions légales</a></li>
+            <li class="mb-2"><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Gestion du choix du type de compte
+    const touristBtn = document.getElementById('touristBtn');
+    const familyBtn = document.getElementById('familyBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    const accountTypeSelection = document.getElementById('accountTypeSelection');
+    const touristForm = document.getElementById('touristForm');
+    const familyForm = document.getElementById('familyForm');
+    const tBackBtn = document.getElementById('tBackBtn');
+    const fBackBtn = document.getElementById('fBackBtn');
+    
+    let userType = 'tourist'; // Valeur par défaut
+    
+    touristBtn.addEventListener('click', function() {
+      this.classList.add('active');
+      familyBtn.classList.remove('active');
+      userType = 'tourist';
+    });
+    
+    familyBtn.addEventListener('click', function() {
+      this.classList.add('active');
+      touristBtn.classList.remove('active');
+      userType = 'family';
+    });
+    
+    continueBtn.addEventListener('click', function() {
+      accountTypeSelection.style.display = 'none';
+      
+      if (userType === 'tourist') {
+        touristForm.style.display = 'block';
+        document.getElementById('step2').classList.add('active');
+        document.getElementById('step1').classList.add('completed');
+      } else {
+        familyForm.style.display = 'block';
+        document.getElementById('step2').classList.add('active');
+        document.getElementById('step1').classList.add('completed');
+      }
+    });
+    
+    tBackBtn.addEventListener('click', function() {
+      touristForm.style.display = 'none';
+      accountTypeSelection.style.display = 'block';
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step1').classList.remove('completed');
+    });
+    
+    fBackBtn.addEventListener('click', function() {
+      familyForm.style.display = 'none';
+      accountTypeSelection.style.display = 'block';
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step1').classList.remove('completed');
+    });
+    
+    // Gestion de la soumission des formulaires
+    document.getElementById('touristForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Ici vous ajouteriez votre logique d'inscription touriste
+      document.getElementById('step3').classList.add('active');
+      document.getElementById('step2').classList.add('completed');
+      
+      // Afficher un message de succès (simulation)
+      alert('Compte touriste créé avec succès !');
+      window.location.href = 'tourist-dashboard.html';
+    });
+    
+    document.getElementById('familyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Ici vous ajouteriez votre logique d'inscription famille
+      document.getElementById('step3').classList.add('active');
+      document.getElementById('step2').classList.add('completed');
+      
+      // Afficher un message de succès (simulation)
+      alert('Compte famille créé avec succès ! Un modérateur validera votre profil sous 48h.');
+      window.location.href = 'family-dashboard.html';
+    });
+  </script>
+</body>
+</html>
