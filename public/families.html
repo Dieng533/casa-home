@@ -768,43 +768,279 @@ async function displayFamilies() {
   const familiesGrid = document.getElementById('familiesGrid');
   const families = await loadFamiliesData();
   
-  // Vider le contenu existant (sauf les cartes statiques si vous en voulez)
-  // familiesGrid.innerHTML = '';
-  
-  families.forEach(family => {
-    const imagePath = `../public/assets/images/${family.images[0]}`;
-    const ratingStars = getRatingStars(family.rating);
+  // Si on a des données JSON, remplacer le contenu statique
+  if (families && families.length > 0) {
+    familiesGrid.innerHTML = '';
     
-    const familyCard = `
-      <div class="col-md-6 col-lg-4">
-        <div class="card family-card h-100">
-          ${family.isNew ? '<span class="badge-new">Nouveau</span>' : ''}
-          <img src="${imagePath}" class="card-img-top family-img" alt="${family.nomFamille}" 
-               onerror="this.onerror=null; this.src='../assets/images/placeholder.jpg';">
-          <div class="card-body position-relative pb-5">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title mb-0">${family.nomFamille}</h5>
-              <div>
-                <span class="badge badge-capacity">${family.capacite} personnes</span>
-                <span class="badge badge-price ms-1">${family.tarif} FCFA</span>
+    families.forEach(family => {
+      const imagePath = `../public/assets/images/${family.images[0]}`;
+      const ratingStars = getRatingStars(family.rating);
+      
+      const familyCard = `
+        <div class="col-md-6 col-lg-4">
+          <div class="card family-card h-100">
+            ${family.isNew ? '<span class="badge-new">Nouveau</span>' : ''}
+            <img src="${imagePath}" class="card-img-top family-img" alt="${family.nomFamille}" 
+                 onerror="this.onerror=null; this.src='../public/assets/images/placeholder.jpg';">
+            <div class="card-body position-relative pb-5">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">${family.nomFamille}</h5>
+                <div>
+                  <span class="badge badge-capacity">${family.capacite} personnes</span>
+                  <span class="badge badge-price ms-1">${family.tarif.toLocaleString('fr-FR')} FCFA</span>
+                </div>
+              </div>
+              <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> ${family.localisation}</p>
+              <div class="rating mb-2">
+                ${ratingStars}
+                <span class="text-muted small ms-1">(${family.reviews} avis)</span>
+              </div>
+              <p class="card-text">${family.presentation.substring(0, 100)}...</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="#" class="text-primary small"><i class="bi bi-heart"></i> Ajouter aux favoris</a>
+                <a href="family-details.html?id=${family.id}" class="btn btn-outline-primary btn-sm" onclick="saveFamilyToSession(${family.id})">Voir plus</a>
               </div>
             </div>
-            <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> ${family.localisation}</p>
-            <div class="rating mb-2">
-              ${ratingStars}
-              <span class="text-muted small ms-1">(${family.reviews} avis)</span>
-            </div>
-            <p class="card-text">${family.presentation.substring(0, 100)}...</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <a href="#" class="text-primary small"><i class="bi bi-heart"></i> Ajouter aux favoris</a>
-              <a href="family-details.html?id=${family.id}" class="btn btn-outline-primary btn-sm">Voir plus</a>
-            </div>
           </div>
-        </div>
-      </div>`;
+        </div>`;
+      
+      familiesGrid.insertAdjacentHTML('beforeend', familyCard);
+    });
+  } else {
+    // Si pas de données JSON, garder les cartes statiques et ajouter les données au localStorage
+    const staticFamilies = [
+      {
+        id: 1,
+        nomFamille: "Famille Diatta",
+        localisation: "Ziguinchor, Casamance",
+        presentation: "La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie avec des repas authentiques et des activités traditionnelles.",
+        capacite: 4,
+        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Jardin",
+        activites: "Cuisine locale, Visite village, Atelier artisanat, Découverte culturelle",
+        tarif: 12000,
+        images: ["3.jpg"],
+        rating: 4.5,
+        reviews: 12,
+        isNew: true,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 2,
+        nomFamille: "Famille Sané",
+        localisation: "Cap Skirring, Casamance",
+        presentation: "Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité. Profitez de la vue sur l'océan et des plages paradisiaques.",
+        capacite: 2,
+        equipements: "Climatisation, Piscine, Wi-Fi, Salle de bain privée, Balcon",
+        activites: "Excursions nature, Plage, Pêche, Sports nautiques",
+        tarif: 15000,
+        images: ["6.jpg"],
+        rating: 5,
+        reviews: 8,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 3,
+        nomFamille: "Famille Badji",
+        localisation: "Oussouye, Casamance",
+        presentation: "Grande famille traditionnelle proposant des activités culturelles et des repas typiques. Découvrez les traditions ancestrales de la Casamance dans un environnement authentique.",
+        capacite: 6,
+        equipements: "Salle de bain partagée, Ventilateur, Terrasse, Jardin potager",
+        activites: "Cuisine locale, Visite village, Atelier artisanat, Danse traditionnelle",
+        tarif: 10000,
+        images: ["4.jpg"],
+        rating: 4.0,
+        reviews: 5,
+        isNew: true,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 4,
+        nomFamille: "Famille Mané",
+        localisation: "Kolda, Casamance",
+        presentation: "Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt et de découverte de la faune locale. Maison traditionnelle entourée de verdure.",
+        capacite: 3,
+        equipements: "Salle de bain privée, Ventilateur, Terrasse, Parking",
+        activites: "Excursions nature, Randonnée, Observation faune, Découverte botanique",
+        tarif: 9500,
+        images: ["casa2.png"],
+        rating: 4.5,
+        reviews: 7,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 5,
+        nomFamille: "Famille Diédhiou",
+        localisation: "Sédhiou, Casamance",
+        presentation: "Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove. Vivez au rythme du fleuve et découvrez les secrets de la pêche traditionnelle.",
+        capacite: 5,
+        equipements: "Salle de bain privée, Ventilateur, Terrasse sur pilotis, Embarcadère",
+        activites: "Pêche traditionnelle, Découverte mangrove, Balade en pirogue, Cuisine locale",
+        tarif: 11000,
+        images: ["8.jpg"],
+        rating: 5.0,
+        reviews: 10,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 6,
+        nomFamille: "Famille Coly",
+        localisation: "Ziguinchor, Casamance",
+        presentation: "Famille jeune et dynamique proposant des activités sportives et culturelles. Idéal pour les voyageurs actifs qui souhaitent découvrir la Casamance de manière moderne.",
+        capacite: 4,
+        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Espace sport",
+        activites: "Sports locaux, Visite culturelle, Atelier cuisine, Découverte urbaine",
+        tarif: 13500,
+        images: ["5.jpg"],
+        rating: 4.0,
+        reviews: 6,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      }
+    ];
     
-    familiesGrid.insertAdjacentHTML('beforeend', familyCard);
-  });
+    // Sauvegarder les données statiques dans localStorage
+    localStorage.setItem('familyListings', JSON.stringify(staticFamilies));
+  }
+}
+
+// Fonction pour sauvegarder les données de la famille en session pour un chargement plus rapide
+async function saveFamilyToSession(familyId) {
+  try {
+    // Essayer d'abord localStorage
+    const families = JSON.parse(localStorage.getItem('familyListings') || '[]');
+    let family = families.find(f => f.id == familyId);
+    
+    // Si pas trouvé, essayer de charger depuis le JSON
+    if (!family) {
+      try {
+        const response = await fetch('data/families.json');
+        if (response.ok) {
+          const jsonFamilies = await response.json();
+          family = jsonFamilies.find(f => f.id == familyId);
+        }
+      } catch (fetchError) {
+        console.log('Impossible de charger le fichier JSON, utilisation des données statiques');
+      }
+    }
+    
+    // Si toujours pas trouvé, utiliser les données statiques par défaut
+    if (!family) {
+      const staticFamilies = [
+        {
+          id: 1,
+          nomFamille: "Famille Diatta",
+          localisation: "Ziguinchor, Casamance",
+          presentation: "La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie avec des repas authentiques et des activités traditionnelles.",
+          capacite: 4,
+          equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Jardin",
+          activites: "Cuisine locale, Visite village, Atelier artisanat, Découverte culturelle",
+          tarif: 12000,
+          images: ["3.jpg"],
+          rating: 4.5,
+          reviews: 12,
+          isNew: true,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        },
+        {
+          id: 2,
+          nomFamille: "Famille Sané",
+          localisation: "Cap Skirring, Casamance",
+          presentation: "Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité. Profitez de la vue sur l'océan et des plages paradisiaques.",
+          capacite: 2,
+          equipements: "Climatisation, Piscine, Wi-Fi, Salle de bain privée, Balcon",
+          activites: "Excursions nature, Plage, Pêche, Sports nautiques",
+          tarif: 15000,
+          images: ["6.jpg"],
+          rating: 5,
+          reviews: 8,
+          isNew: false,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        },
+        {
+          id: 3,
+          nomFamille: "Famille Badji",
+          localisation: "Oussouye, Casamance",
+          presentation: "Grande famille traditionnelle proposant des activités culturelles et des repas typiques. Découvrez les traditions ancestrales de la Casamance dans un environnement authentique.",
+          capacite: 6,
+          equipements: "Salle de bain partagée, Ventilateur, Terrasse, Jardin potager",
+          activites: "Cuisine locale, Visite village, Atelier artisanat, Danse traditionnelle",
+          tarif: 10000,
+          images: ["4.jpg"],
+          rating: 4.0,
+          reviews: 5,
+          isNew: true,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        },
+        {
+          id: 4,
+          nomFamille: "Famille Mané",
+          localisation: "Kolda, Casamance",
+          presentation: "Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt et de découverte de la faune locale. Maison traditionnelle entourée de verdure.",
+          capacite: 3,
+          equipements: "Salle de bain privée, Ventilateur, Terrasse, Parking",
+          activites: "Excursions nature, Randonnée, Observation faune, Découverte botanique",
+          tarif: 9500,
+          images: ["casa2.png"],
+          rating: 4.5,
+          reviews: 7,
+          isNew: false,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        },
+        {
+          id: 5,
+          nomFamille: "Famille Diédhiou",
+          localisation: "Sédhiou, Casamance",
+          presentation: "Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove. Vivez au rythme du fleuve et découvrez les secrets de la pêche traditionnelle.",
+          capacite: 5,
+          equipements: "Salle de bain privée, Ventilateur, Terrasse sur pilotis, Embarcadère",
+          activites: "Pêche traditionnelle, Découverte mangrove, Balade en pirogue, Cuisine locale",
+          tarif: 11000,
+          images: ["8.jpg"],
+          rating: 5.0,
+          reviews: 10,
+          isNew: false,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        },
+        {
+          id: 6,
+          nomFamille: "Famille Coly",
+          localisation: "Ziguinchor, Casamance",
+          presentation: "Famille jeune et dynamique proposant des activités sportives et culturelles. Idéal pour les voyageurs actifs qui souhaitent découvrir la Casamance de manière moderne.",
+          capacite: 4,
+          equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Espace sport",
+          activites: "Sports locaux, Visite culturelle, Atelier cuisine, Découverte urbaine",
+          tarif: 13500,
+          images: ["5.jpg"],
+          rating: 4.0,
+          reviews: 6,
+          isNew: false,
+          dateDebut: "2024-01-01",
+          dateFin: "2024-12-31"
+        }
+      ];
+      family = staticFamilies.find(f => f.id == familyId);
+    }
+    
+    if (family) {
+      sessionStorage.setItem(`family_${familyId}`, JSON.stringify(family));
+    }
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde en session:', error);
+  }
 }
 
 // Helper pour les étoiles de notation
@@ -826,8 +1062,118 @@ function getRatingStars(rating) {
   return stars;
 }
 
+// Fonction pour initialiser les données
+async function initializeData() {
+  try {
+    // Afficher les familles (avec fallback vers les données statiques)
+    await displayFamilies();
+  } catch (error) {
+    console.error('Erreur lors de l\'initialisation:', error);
+    // En cas d'erreur, s'assurer que les données statiques sont dans localStorage
+    const staticFamilies = [
+      {
+        id: 1,
+        nomFamille: "Famille Diatta",
+        localisation: "Ziguinchor, Casamance",
+        presentation: "La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie avec des repas authentiques et des activités traditionnelles.",
+        capacite: 4,
+        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Jardin",
+        activites: "Cuisine locale, Visite village, Atelier artisanat, Découverte culturelle",
+        tarif: 12000,
+        images: ["3.jpg"],
+        rating: 4.5,
+        reviews: 12,
+        isNew: true,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 2,
+        nomFamille: "Famille Sané",
+        localisation: "Cap Skirring, Casamance",
+        presentation: "Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité. Profitez de la vue sur l'océan et des plages paradisiaques.",
+        capacite: 2,
+        equipements: "Climatisation, Piscine, Wi-Fi, Salle de bain privée, Balcon",
+        activites: "Excursions nature, Plage, Pêche, Sports nautiques",
+        tarif: 15000,
+        images: ["6.jpg"],
+        rating: 5,
+        reviews: 8,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 3,
+        nomFamille: "Famille Badji",
+        localisation: "Oussouye, Casamance",
+        presentation: "Grande famille traditionnelle proposant des activités culturelles et des repas typiques. Découvrez les traditions ancestrales de la Casamance dans un environnement authentique.",
+        capacite: 6,
+        equipements: "Salle de bain partagée, Ventilateur, Terrasse, Jardin potager",
+        activites: "Cuisine locale, Visite village, Atelier artisanat, Danse traditionnelle",
+        tarif: 10000,
+        images: ["4.jpg"],
+        rating: 4.0,
+        reviews: 5,
+        isNew: true,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 4,
+        nomFamille: "Famille Mané",
+        localisation: "Kolda, Casamance",
+        presentation: "Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt et de découverte de la faune locale. Maison traditionnelle entourée de verdure.",
+        capacite: 3,
+        equipements: "Salle de bain privée, Ventilateur, Terrasse, Parking",
+        activites: "Excursions nature, Randonnée, Observation faune, Découverte botanique",
+        tarif: 9500,
+        images: ["casa2.png"],
+        rating: 4.5,
+        reviews: 7,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 5,
+        nomFamille: "Famille Diédhiou",
+        localisation: "Sédhiou, Casamance",
+        presentation: "Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove. Vivez au rythme du fleuve et découvrez les secrets de la pêche traditionnelle.",
+        capacite: 5,
+        equipements: "Salle de bain privée, Ventilateur, Terrasse sur pilotis, Embarcadère",
+        activites: "Pêche traditionnelle, Découverte mangrove, Balade en pirogue, Cuisine locale",
+        tarif: 11000,
+        images: ["8.jpg"],
+        rating: 5.0,
+        reviews: 10,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      },
+      {
+        id: 6,
+        nomFamille: "Famille Coly",
+        localisation: "Ziguinchor, Casamance",
+        presentation: "Famille jeune et dynamique proposant des activités sportives et culturelles. Idéal pour les voyageurs actifs qui souhaitent découvrir la Casamance de manière moderne.",
+        capacite: 4,
+        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Espace sport",
+        activites: "Sports locaux, Visite culturelle, Atelier cuisine, Découverte urbaine",
+        tarif: 13500,
+        images: ["5.jpg"],
+        rating: 4.0,
+        reviews: 6,
+        isNew: false,
+        dateDebut: "2024-01-01",
+        dateFin: "2024-12-31"
+      }
+    ];
+    localStorage.setItem('familyListings', JSON.stringify(staticFamilies));
+  }
+}
+
 // Appeler la fonction au chargement de la page
-document.addEventListener('DOMContentLoaded', displayFamilies);
+document.addEventListener('DOMContentLoaded', initializeData);
   </script>
   
   <!-- Modal Connexion Requise -->

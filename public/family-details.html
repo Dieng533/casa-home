@@ -311,8 +311,8 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="../index.html">
-        <img src="../assets/images/logo_casahome.png" alt="Casa Home Logo">
+      <a class="navbar-brand" href="../../index.html">
+        <img src="../public/assets/images/logo_casahome.png" alt="Casa Home">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -553,10 +553,10 @@
       // Image principale
       const mainImg = document.getElementById('familyMainImage');
       if (family.images && family.images.length > 0) {
-        mainImg.src = `../assets/images/${family.images[0]}`;
+        mainImg.src = `../public/assets/images/${family.images[0]}`;
         mainImg.alt = family.nomFamille || 'Famille';
         mainImg.onerror = () => { 
-          mainImg.src = '../assets/images/placeholder.jpg';
+          mainImg.src = '../public/assets/images/placeholder.jpg';
         };
       }
 
@@ -583,8 +583,8 @@
       if (family.images && family.images.length > 1) {
         gallery.innerHTML = family.images.slice(1).map((img, index) => `
           <div class="gallery-item">
-            <img src="../assets/images/${img}" alt="Photo ${index + 1} de ${family.nomFamille || 'la famille'}" 
-                 onerror="this.src='../assets/images/placeholder.jpg'">
+            <img src="../public/assets/images/${img}" alt="Photo ${index + 1} de ${family.nomFamille || 'la famille'}" 
+                 onerror="this.src='../public/assets/images/placeholder.jpg'">
           </div>
         `).join('');
       } else {
@@ -659,13 +659,19 @@
         }
 
         // 4. Charger depuis le fichier JSON
-        const response = await fetch('../data/families.json');
+        const response = await fetch('data/families.json');
         if (response.ok) {
           const families = await response.json();
           const jsonFamily = families.find(f => f.id == familyId);
           
           if (jsonFamily) {
             displayFamilyData(jsonFamily);
+            // Sauvegarder dans localStorage pour les prochaines visites
+            const currentFamilies = JSON.parse(localStorage.getItem('familyListings') || '[]');
+            if (!currentFamilies.find(f => f.id == jsonFamily.id)) {
+              currentFamilies.push(jsonFamily);
+              localStorage.setItem('familyListings', JSON.stringify(currentFamilies));
+            }
             return;
           }
         }
