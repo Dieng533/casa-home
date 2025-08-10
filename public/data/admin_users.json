@@ -1,0 +1,79 @@
+{
+  "admins": [
+    {
+      "id": 1,
+      "email": "admin@casahome.com",
+      "password": "admin123",
+      "role": "admin",
+      "nom": "Admin",
+      "prenom": "Principal",
+      "telephone": "+221777777777",
+      "permissions": ["all"],
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z",
+      "last_login": null,
+      "avatar": "../assets/images/admin-avatar.png"
+    },
+    {
+      "id": 2,
+      "email": "superadmin@casahome.com",
+      "password": "superadmin2024",
+      "role": "admin",
+      "nom": "Super",
+      "prenom": "Administrateur",
+      "telephone": "+221777777778",
+      "permissions": ["all", "user_management", "system_config"],
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z",
+      "last_login": null,
+      "avatar": "../assets/images/admin-avatar.png"
+    },
+    {
+      "id": 3,
+      "email": "moderateur@casahome.com",
+      "password": "moderateur123",
+      "role": "admin",
+      "nom": "Modérateur",
+      "prenom": "Content",
+      "telephone": "+221777777779",
+      "permissions": ["content_moderation", "family_validation", "reservation_management"],
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z",
+      "last_login": null,
+      "avatar": "../assets/images/admin-avatar.png"
+    },
+    {
+      "id": 4,
+      "email": "support@casahome.com",
+      "password": "support123",
+      "role": "admin",
+      "nom": "Support",
+      "prenom": "Client",
+      "telephone": "+221777777780",
+      "permissions": ["user_support", "reservation_management", "basic_reports"],
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z",
+      "last_login": null,
+      "avatar": "../assets/images/admin-avatar.png"
+    }
+  ],
+  "permissions": {
+    "all": "Accès complet à toutes les fonctionnalités",
+    "user_management": "Gestion des utilisateurs (création, modification, suppression)",
+    "system_config": "Configuration du système",
+    "content_moderation": "Modération du contenu",
+    "family_validation": "Validation des familles d'accueil",
+    "reservation_management": "Gestion des réservations",
+    "user_support": "Support utilisateur",
+    "basic_reports": "Rapports de base",
+    "financial_management": "Gestion financière",
+    "analytics": "Analyses et statistiques"
+  },
+  "settings": {
+    "max_login_attempts": 5,
+    "session_timeout": 3600,
+    "password_expiry_days": 90,
+    "require_2fa": false,
+    "log_admin_actions": true
+  }
+}

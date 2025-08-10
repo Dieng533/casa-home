@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Détails de la famille - Casa Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="../assets/images/logo_casahome.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+      --light-orange: #FFF4ED;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+      position: relative;
+      padding: 8px 12px !important;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background-color: var(--primary-blue);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+      font-weight: 500;
+      padding: 12px 24px;
+      box-shadow: 0 2px 8px rgba(235, 111, 39, 0.3);
+      transition: all 0.2s;
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(235, 111, 39, 0.4);
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+      font-weight: 500;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .text-primary {
+      color: var(--primary-blue) !important;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Styles spécifiques à la page détails */
+    .family-hero {
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7));
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+    }
+    
+    .family-image {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .family-image img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1.5rem;
+    }
+    
+    .info-card h3 {
+      color: var(--primary-blue);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card h3 i {
+      margin-right: 0.5rem;
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .feature-list li i {
+      color: var(--primary-orange);
+      margin-right: 0.5rem;
+      width: 20px;
+    }
+    
+    .price-card {
+      background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .price-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .price-period {
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+    
+    .availability-badge {
+      background-color: #28a745;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 500;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    .rating {
+      color: var(--primary-orange);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .reservation-form {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-control, .form-select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 0.25rem rgba(42, 164, 205, 0.25);
+    }
+    
+    .alert {
+      border-radius: 8px;
+      border: none;
+    }
+    
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    /* Loading overlay */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .spinner-large {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    /* Améliorations responsives */
+    @media (max-width: 768px) {
+      .family-hero {
+        padding: 2rem 0;
+        text-align: center;
+      }
+      
+      .price-card {
+        margin-top: 2rem;
+      }
+      
+      .family-image img {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div class="spinner-border spinner-large text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">
+        <img src="../assets/images/logo_casahome.png" alt="Casa Home Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="families.html">Familles</a></li>
+          <li class="nav-item"><a class="nav-link" href="search.html">Recherche</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex">
+          <a class="btn btn-outline-primary" href="login.html">Connexion</a>
+          <a class="btn btn-primary ms-2" href="register.html">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="family-hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-5 fw-bold mb-3" id="familyName">Chargement...</h1>
+          <p class="lead mb-3" id="familyLocation"><i class="bi bi-geo-alt-fill me-2"></i></p>
+          <div class="rating mb-3" id="familyRating">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+            <span class="text-white ms-2">(0 avis)</span>
+          </div>
+          <div class="availability-badge" id="availabilityBadge">
+            <i class="bi bi-check-circle me-2"></i>Disponibilité à confirmer
+          </div>
+        </div>
+        <div class="col-lg-4 text-center">
+          <div class="price-card">
+            <div class="price-amount" id="familyPrice">0 FCFA</div>
+            <div class="price-period">par nuit</div>
+            <button class="btn btn-light btn-lg" onclick="scrollToReservation()">
+              <i class="bi bi-calendar-check me-2"></i>Réserver maintenant
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container py-4">
+    <div class="row">
+      <!-- Colonne principale -->
+      <div class="col-lg-8">
+        <!-- Image principale -->
+        <div class="family-image mb-4">
+          <img src="../assets/images/placeholder.jpg" alt="Famille d'accueil" id="familyMainImage">
+        </div>
+        
+        <!-- Description -->
+        <div class="info-card">
+          <h3><i class="bi bi-chat-quote"></i>À propos de cette famille</h3>
+          <p id="familyDescription">Chargement de la description...</p>
+        </div>
+        
+        <!-- Équipements -->
+        <div class="info-card">
+          <h3><i class="bi bi-house-gear"></i>Équipements disponibles</h3>
+          <ul class="feature-list" id="equipmentsList">
+            <li><i class="bi bi-hourglass-split"></i>Chargement des équipements...</li>
+          </ul>
+        </div>
+        
+        <!-- Activités proposées -->
+        <div class="info-card">
+          <h3><i class="bi bi-activity"></i>Activités proposées</h3>
+          <ul class="feature-list" id="activitiesList">
+            <li><i class="bi bi-hourglass-split"></i>Chargement des activités...</li>
+          </ul>
+        </div>
+        
+        <!-- Galerie photos -->
+        <div class="info-card">
+          <h3><i class="bi bi-images"></i>Galerie photos</h3>
+          <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-item">
+              <img src="../assets/images/placeholder.jpg" alt="Photo de la famille">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <!-- Formulaire de réservation -->
+        <div class="reservation-form sticky-top" style="top: 20px;">
+          <h3 class="mb-4"><i class="bi bi-calendar-check me-2"></i>Réserver votre séjour</h3>
+          
+          <!-- Messages d'alerte -->
+          <div id="alertMessage" class="alert d-none" role="alert">
+            <span id="alertText"></span>
+          </div>
+          
+          <form id="reservationForm">
+            <div class="mb-3">
+              <label for="checkIn" class="form-label">Date d'arrivée</label>
+              <input type="date" class="form-control" id="checkIn" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="checkOut" class="form-label">Date de départ</label>
+              <input type="date" class="form-control" id="checkOut" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="guests" class="form-label">Nombre de voyageurs</label>
+              <select class="form-select" id="guests" required>
+                <option value="">Sélectionner</option>
+                <option value="1">1 personne</option>
+                <option value="2">2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+                <option value="5">5 personnes</option>
+                <option value="6">6+ personnes</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="message" class="form-label">Message (optionnel)</label>
+              <textarea class="form-control" id="message" rows="3" placeholder="Précisez vos besoins, questions..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <span>Total estimé:</span>
+                <span class="fw-bold fs-5" id="totalPrice">0 FCFA</span>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 py-3" id="reserveBtn">
+              <i class="bi bi-check-circle me-2"></i>Confirmer la réservation
+            </button>
+          </form>
+          
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              <i class="bi bi-shield-check me-1"></i>
+              Réservation sécurisée • Paiement à l'arrivée
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer mt-5">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h3 class="h5 mb-3"><img src="../assets/images/logo_casahome.png" alt="Casa Home Logo" height="30" class="me-2">Casa Home</h3>
+          <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Navigation</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="../index.html">Accueil</a></li>
+            <li class="mb-2"><a href="families.html">Familles</a></li>
+            <li class="mb-2"><a href="search.html">Recherche</a></li>
+            <li class="mb-2"><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Informations</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">À propos</a></li>
+            <li class="mb-2"><a href="#">Comment ça marche</a></li>
+            <li class="mb-2"><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="h6 mb-3">Légal</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#">Conditions générales</a></li>
+            <li class="mb-2"><a href="#">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="#">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Récupérer l'ID de la famille depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const familyId = urlParams.get('id');
+    
+    // Fonctions utilitaires
+    function showAlert(message, type = 'success') {
+      const alertDiv = document.getElementById('alertMessage');
+      const alertText = document.getElementById('alertText');
+      
+      alertDiv.className = `alert alert-${type}`;
+      alertText.textContent = message;
+      alertDiv.classList.remove('d-none');
+      
+      setTimeout(() => {
+        alertDiv.classList.add('d-none');
+      }, 5000);
+    }
+    
+    function scrollToReservation() {
+      document.getElementById('reservationForm').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }
+    
+    // Fonction pour afficher les données de la famille
+    function displayFamilyData(family) {
+      // Masquer l'overlay de chargement
+      document.getElementById('loading-overlay').style.display = 'none';
+      
+      // Texte
+      document.getElementById('familyName').textContent = family.nomFamille || 'Famille';
+      document.getElementById('familyLocation').innerHTML = `<i class="bi bi-geo-alt-fill me-2"></i>${family.localisation || 'Casamance'}`;
+      document.getElementById('familyPrice').textContent = family.tarif ? `${family.tarif.toLocaleString('fr-FR')} FCFA` : 'Prix sur demande';
+      document.getElementById('familyDescription').textContent = family.presentation || 'Famille d\'accueil chaleureuse en Casamance.';
+
+      // Image principale
+      const mainImg = document.getElementById('familyMainImage');
+      if (family.images && family.images.length > 0) {
+        mainImg.src = `../assets/images/${family.images[0]}`;
+        mainImg.alt = family.nomFamille || 'Famille';
+        mainImg.onerror = () => { 
+          mainImg.src = '../assets/images/placeholder.jpg';
+        };
+      }
+
+      // Équipements
+      const equipList = document.getElementById('equipmentsList');
+      if (family.equipements) {
+        const items = family.equipements.split(',').map(e => 
+          `<li><i class="bi bi-check-circle"></i>${e.trim()}</li>`
+        ).join('');
+        equipList.innerHTML = items || '<li><i class="bi bi-info-circle"></i>Aucun équipement spécifié</li>';
+      }
+
+      // Activités
+      const activList = document.getElementById('activitiesList');
+      if (family.activites) {
+        const items = family.activites.split(',').map(a => 
+          `<li><i class="bi bi-activity"></i>${a.trim()}</li>`
+        ).join('');
+        activList.innerHTML = items || '<li><i class="bi bi-info-circle"></i>Aucune activité spécifiée</li>';
+      }
+
+      // Galerie photos
+      const gallery = document.getElementById('galleryGrid');
+      if (family.images && family.images.length > 1) {
+        gallery.innerHTML = family.images.slice(1).map((img, index) => `
+          <div class="gallery-item">
+            <img src="../assets/images/${img}" alt="Photo ${index + 1} de ${family.nomFamille || 'la famille'}" 
+                 onerror="this.src='../assets/images/placeholder.jpg'">
+          </div>
+        `).join('');
+      } else {
+        gallery.innerHTML = '<p class="text-muted"><i class="bi bi-image me-2"></i>Aucune autre photo disponible</p>';
+      }
+
+      // Notation
+      const ratingEl = document.getElementById('familyRating');
+      if (family.rating) {
+        ratingEl.innerHTML = getRatingStars(family.rating) + 
+          `<span class="text-white ms-2">(${family.reviews || 0} avis)</span>`;
+      }
+      
+      // Disponibilité
+      const availBadge = document.getElementById('availabilityBadge');
+      if (family.dateDebut && family.dateFin) {
+        const today = new Date();
+        const start = new Date(family.dateDebut);
+        const end = new Date(family.dateFin);
+        
+        if (today >= start && today <= end) {
+          availBadge.innerHTML = '<i class="bi bi-check-circle me-2"></i>Disponible';
+        } else {
+          availBadge.innerHTML = '<i class="bi bi-calendar-x me-2"></i>Disponible du ' + 
+            start.toLocaleDateString('fr-FR') + ' au ' + end.toLocaleDateString('fr-FR');
+        }
+      }
+    }
+    
+    // Helper pour les étoiles de notation
+    function getRatingStars(rating) {
+      let stars = '';
+      const fullStars = Math.floor(rating);
+      const hasHalf = rating % 1 >= 0.5;
+      
+      for (let i = 1; i <= 5; i++) {
+        if (i <= fullStars) {
+          stars += '<i class="bi bi-star-fill"></i>';
+        } else if (i === fullStars + 1 && hasHalf) {
+          stars += '<i class="bi bi-star-half"></i>';
+        } else {
+          stars += '<i class="bi bi-star"></i>';
+        }
+      }
+      
+      return stars;
+    }
+    
+    // Fonction pour charger les données de la famille
+    async function loadFamilyData() {
+      try {
+        // 1. Vérifier dans sessionStorage (chargement instantané depuis la liste)
+        const sessionFamily = sessionStorage.getItem(`family_${familyId}`);
+        if (sessionFamily) {
+          displayFamilyData(JSON.parse(sessionFamily));
+          sessionStorage.removeItem(`family_${familyId}`);
+          return;
+        }
+
+        // 2. Si ID manquant
+        if (!familyId) {
+          throw new Error('ID de famille manquant');
+        }
+
+        // 3. Chercher dans localStorage
+        const localFamilies = JSON.parse(localStorage.getItem('familyListings') || '[]');
+        const localFamily = localFamilies.find(f => f.id == familyId);
+        
+        if (localFamily) {
+          displayFamilyData(localFamily);
+          return;
+        }
+
+        // 4. Charger depuis le fichier JSON
+        const response = await fetch('../data/families.json');
+        if (response.ok) {
+          const families = await response.json();
+          const jsonFamily = families.find(f => f.id == familyId);
+          
+          if (jsonFamily) {
+            displayFamilyData(jsonFamily);
+            return;
+          }
+        }
+
+        throw new Error('Famille non trouvée');
+        
+      } catch (error) {
+        console.error("Erreur:", error);
+        document.getElementById('loading-overlay').innerHTML = `
+          <div class="text-center">
+            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">Impossible de charger cette famille</h3>
+            <p>${error.message}</p>
+            <a href="families.html" class="btn btn-primary mt-3">Retour à la liste</a>
+          </div>
+        `;
+      }
+    }
+    
+    // Calcul du prix total
+    function calculateTotal() {
+      const checkIn = document.getElementById('checkIn').value;
+      const checkOut = document.getElementById('checkOut').value;
+      const guests = parseInt(document.getElementById('guests').value) || 0;
+      
+      if (!checkIn || !checkOut || guests < 1) {
+        document.getElementById('totalPrice').textContent = '0 FCFA';
+        return;
+      }
+
+      const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+      const familyListings = JSON.parse(localStorage.getItem('familyListings') || '[]');
+      const family = familyListings.find(f => f.id == familyId);
+      const pricePerNight = family?.tarif || 0;
+      
+      document.getElementById('totalPrice').textContent = `${(nights * pricePerNight).toLocaleString('fr-FR')} FCFA`;
+    }
+    
+    // Soumission du formulaire
+    function handleReservationSubmit(e) {
+      e.preventDefault();
+      
+      const formData = {
+        checkIn: document.getElementById('checkIn').value,
+        checkOut: document.getElementById('checkOut').value,
+        guests: parseInt(document.getElementById('guests').value),
+        message: document.getElementById('message').value,
+        familyId: familyId,
+        familyName: document.getElementById('familyName').textContent,
+        totalPrice: document.getElementById('totalPrice').textContent,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      };
+
+      // Validation
+      if (!formData.checkIn || !formData.checkOut || formData.guests < 1) {
+        showAlert('Veuillez remplir tous les champs obligatoires', 'danger');
+        return;
+      }
+
+      // Sauvegarde
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+      reservations.push({ ...formData, id: Date.now() });
+      localStorage.setItem('reservations', JSON.stringify(reservations));
+
+      showAlert('Réservation envoyée avec succès! La famille vous contactera pour confirmation.', 'success');
+      document.getElementById('reservationForm').reset();
+      document.getElementById('totalPrice').textContent = '0 FCFA';
+    }
+    
+    // Initialisation de la page
+    function initializePage() {
+      // Année courante
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Définir les dates min
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('checkIn').min = today;
+      document.getElementById('checkOut').min = today;
+
+      // Charger les données
+      loadFamilyData();
+
+      // Événements
+      document.getElementById('checkIn').addEventListener('change', calculateTotal);
+      document.getElementById('checkOut').addEventListener('change', calculateTotal);
+      document.getElementById('guests').addEventListener('change', calculateTotal);
+      document.getElementById('reservationForm').addEventListener('submit', handleReservationSubmit);
+    }
+
+    // Démarrer quand le DOM est prêt
+    document.addEventListener('DOMContentLoaded', initializePage);
+  </script>
+</body>
+</html>

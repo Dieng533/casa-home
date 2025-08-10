@@ -139,6 +139,24 @@
       color: var(--primary-blue);
     }
     
+    .selection-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: var(--primary-blue);
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .user-type-btn.active .selection-indicator {
+      opacity: 1;
+    }
+    
+    .user-type-btn {
+      position: relative;
+    }
+    
     .divider {
       display: flex;
       align-items: center;
@@ -214,6 +232,9 @@
                 <i class="bi bi-person"></i>
                 <h5 class="fw-bold">Je suis touriste</h5>
                 <p class="small text-muted">Je cherche un hébergement</p>
+                <div class="selection-indicator" id="touristIndicator">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
               </div>
             </div>
             <div class="col-6">
@@ -221,11 +242,20 @@
                 <i class="bi bi-people"></i>
                 <h5 class="fw-bold">Je suis famille</h5>
                 <p class="small text-muted">Je propose un hébergement</p>
+                <div class="selection-indicator" id="familyIndicator">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
               </div>
             </div>
           </div>
           
           <form id="loginForm">
+            <!-- Zone d'affichage des erreurs -->
+            <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <span id="errorText"></span>
+            </div>
+            
             <div class="mb-3">
               <label for="email" class="form-label">Adresse email</label>
               <input type="email" class="form-control" id="email" placeholder="votre@email.com" required>
@@ -244,13 +274,24 @@
               <label class="form-check-label" for="remember">Se souvenir de moi</label>
             </div>
             
-            <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Se connecter</button>
+            <button type="submit" class="btn btn-primary w-100 py-2 mb-3" id="loginBtn">
+              <span id="loginBtnText">Se connecter</span>
+              <span id="loginBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+            </button>
             
             <div class="divider">ou</div>
             
             <div class="text-center">
               <p class="mb-3">Vous n'avez pas de compte ?</p>
               <a href="register.html" class="btn btn-outline-primary">Créer un compte</a>
+            </div>
+            
+            <hr class="my-3">
+            <div class="text-center">
+              <p class="small text-muted mb-0">
+                <i class="bi bi-shield-lock me-1"></i>
+                <a href="admin-dashbord/admin-login.html" class="text-muted">Accès administrateur</a>
+              </p>
             </div>
           </form>
         </div>
@@ -337,51 +378,225 @@
       return users.find(u => (u.email||'').toLowerCase() === email.toLowerCase());
     }
     
+    // Initialiser quelques utilisateurs de test si aucun n'existe
+    function initializeTestUsers() {
+      const users = readUsers();
+      if (users.length === 0) {
+        const testUsers = [
+          {
+            id: 1,
+            email: 'touriste@test.com',
+            password: 'password123',
+            role: 'tourist',
+            nom: 'Jean Dupont',
+            prenom: 'Jean'
+          },
+          {
+            id: 2,
+            email: 'famille@test.com',
+            password: 'password123',
+            role: 'family',
+            nom: 'Famille Diatta',
+            prenom: 'Mariama'
+          },
+          {
+            id: 3,
+            email: 'admin@test.com',
+            password: 'admin123',
+            role: 'admin',
+            nom: 'Admin',
+            prenom: 'Administrateur'
+          }
+        ];
+        
+        try {
+          localStorage.setItem('users', JSON.stringify(testUsers));
+          console.log('Utilisateurs de test initialisés');
+        } catch (e) {
+          console.error('Erreur lors de l\'initialisation des utilisateurs de test:', e);
+        }
+      }
+    }
+    
+    // Initialiser les utilisateurs de test au chargement de la page
+    initializeTestUsers();
+    
     // Gestion du choix du type d'utilisateur
     const touristBtn = document.getElementById('touristBtn');
     const familyBtn = document.getElementById('familyBtn');
     let userType = 'tourist'; // Valeur par défaut
     
+    function updateUserTypeSelection() {
+      // Mettre à jour l'affichage visuel
+      if (userType === 'tourist') {
+        touristBtn.classList.add('active');
+        familyBtn.classList.remove('active');
+        touristBtn.style.borderColor = 'var(--primary-blue)';
+        familyBtn.style.borderColor = '#dee2e6';
+        document.getElementById('touristIndicator').style.opacity = '1';
+        document.getElementById('familyIndicator').style.opacity = '0';
+      } else {
+        familyBtn.classList.add('active');
+        touristBtn.classList.remove('active');
+        familyBtn.style.borderColor = 'var(--primary-blue)';
+        touristBtn.style.borderColor = '#dee2e6';
+        document.getElementById('familyIndicator').style.opacity = '1';
+        document.getElementById('touristIndicator').style.opacity = '0';
+      }
+      
+      // Masquer les erreurs quand l'utilisateur change de type
+      hideError();
+    }
+    
     touristBtn.addEventListener('click', function() {
-      this.classList.add('active');
-      familyBtn.classList.remove('active');
       userType = 'tourist';
+      updateUserTypeSelection();
     });
     
     familyBtn.addEventListener('click', function() {
-      this.classList.add('active');
-      touristBtn.classList.remove('active');
       userType = 'family';
+      updateUserTypeSelection();
     });
+    
+    // Initialiser l'affichage
+    updateUserTypeSelection();
+    
+    // Fonctions utilitaires pour l'affichage des erreurs
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+      errorText.textContent = message;
+      errorDiv.classList.remove('d-none');
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    function hideError() {
+      document.getElementById('errorMessage').classList.add('d-none');
+    }
+    
+    function setLoading(loading) {
+      const btn = document.getElementById('loginBtn');
+      const btnText = document.getElementById('loginBtnText');
+      const spinner = document.getElementById('loginBtnSpinner');
+      
+      if (loading) {
+        btn.disabled = true;
+        btnText.textContent = 'Connexion en cours...';
+        spinner.classList.remove('d-none');
+      } else {
+        btn.disabled = false;
+        btnText.textContent = 'Se connecter';
+        spinner.classList.add('d-none');
+      }
+    }
     
     // Gestion de la soumission du formulaire
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+      
+      // Masquer les erreurs précédentes
+      hideError();
+      
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      let user = await apiLogin(email, password);
-      if(!user){
-        // fallback local if API not available
-        const local = findUserByEmail(email);
-        if(!local || local.password !== password){ alert('Identifiants invalides.'); return; }
-        user = { ...local };
-        delete user.password;
-      }
-      // Synchroniser avec le rôle enregistré du compte
-      userType = user.role || userType;
-      setCurrentUser(user);
       
-      // Redirection en fonction du rôle
-      if (userType === 'tourist') {
-        window.location.href = 'admin-dashbord/touristes.html';
-      } else if (userType === 'family') {
-        window.location.href = 'admin-dashbord/familles.html';
-      } else if (userType === 'admin') {
-        window.location.href = 'admin-dashbord/admin.html';
-      } else {
-        window.location.href = '../index.html';
+      // Validation des champs
+      if (!email || !password) {
+        showError('Veuillez remplir tous les champs obligatoires.');
+        return;
+      }
+      
+      if (!email.includes('@')) {
+        showError('Veuillez saisir une adresse email valide.');
+        return;
+      }
+      
+      if (!userType) {
+        showError('Veuillez sélectionner votre type de compte (touriste ou famille d\'accueil).');
+        return;
+      }
+      
+      // Afficher le chargement
+      setLoading(true);
+      
+      try {
+        let user = await apiLogin(email, password);
+        
+        if (user) {
+          // Vérifier que le type de compte correspond au choix de l'utilisateur
+          if (user.role !== userType) {
+            if (userType === 'tourist' && user.role === 'family') {
+              showError('Ce compte est un compte famille d\'accueil. Veuillez sélectionner "Je suis famille" ou utiliser un compte touriste.');
+            } else if (userType === 'family' && user.role === 'tourist') {
+              showError('Ce compte est un compte touriste. Veuillez sélectionner "Je suis touriste" ou utiliser un compte famille d\'accueil.');
+            } else if (user.role === 'admin') {
+              showError('Ce compte est un compte administrateur. Veuillez vous connecter via l\'interface d\'administration.');
+            } else {
+              showError('Type de compte incorrect. Veuillez sélectionner le bon type de compte.');
+            }
+            return;
+          }
+        } else {
+          // Fallback local si l'API n'est pas disponible
+          const local = findUserByEmail(email);
+          
+          if (!local) {
+            showError('Aucun compte trouvé avec cette adresse email. Veuillez vérifier votre email ou créer un compte.');
+            return;
+          }
+          
+          if (local.password !== password) {
+            showError('Mot de passe incorrect. Veuillez vérifier votre mot de passe ou utiliser "Mot de passe oublié".');
+            return;
+          }
+          
+          // Vérifier que le type de compte correspond au choix de l'utilisateur
+          if (local.role !== userType) {
+            if (userType === 'tourist' && local.role === 'family') {
+              showError('Ce compte est un compte famille d\'accueil. Veuillez sélectionner "Je suis famille" ou utiliser un compte touriste.');
+            } else if (userType === 'family' && local.role === 'tourist') {
+              showError('Ce compte est un compte touriste. Veuillez sélectionner "Je suis touriste" ou utiliser un compte famille d\'accueil.');
+            } else if (local.role === 'admin') {
+              showError('Ce compte est un compte administrateur. Veuillez vous connecter via l\'interface d\'administration.');
+            } else {
+              showError('Type de compte incorrect. Veuillez sélectionner le bon type de compte.');
+            }
+            return;
+          }
+          
+          user = { ...local };
+          delete user.password;
+        }
+        
+        // Synchroniser avec le rôle enregistré du compte
+        userType = user.role || userType;
+        setCurrentUser(user);
+        
+        // Marquer comme connecté
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // Redirection en fonction du rôle
+        if (userType === 'tourist') {
+          window.location.href = 'admin-dashbord/touristes.html';
+        } else if (userType === 'family') {
+          window.location.href = 'admin-dashbord/familles.html';
+        } else if (userType === 'admin') {
+          window.location.href = 'admin-dashbord/admin.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+        
+      } catch (error) {
+        console.error('Erreur de connexion:', error);
+        showError('Erreur de connexion. Veuillez réessayer ou contacter le support si le problème persiste.');
+      } finally {
+        setLoading(false);
       }
     });
+    
+    // Masquer l'erreur quand l'utilisateur commence à taper
+    document.getElementById('email').addEventListener('input', hideError);
+    document.getElementById('password').addEventListener('input', hideError);
   </script>
 </body>
 </html>

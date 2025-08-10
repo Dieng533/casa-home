@@ -11,98 +11,432 @@
   <link rel="shortcut icon" href="../assets/images/logo_casahome.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary-blue:#2AA4CD; --primary-orange:#EB6F27; }
-    body { font-family:'Poppins',sans-serif; }
-    .navbar-branding { background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.08); }
-    .section-card { border:none; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.06); }
-    .badge-status { font-size:.75rem; }
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+      --sidebar-width: 280px;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    
+    /* Navigation */
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    
+    .navbar-brand img {
+      height: 40px;
+    }
+    
+    /* Sidebar */
+    .admin-sidebar {
+      width: var(--sidebar-width);
+      background-color: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+      padding-top: 70px;
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar-item {
+      padding: 0.75rem 1.5rem;
+      color: #555;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-item:hover, .sidebar-item.active {
+      background-color: var(--light-blue);
+      color: var(--primary-blue);
+    }
+    
+    .sidebar-item i {
+      margin-right: 10px;
+      font-size: 1.1rem;
+    }
+    
+    /* Main content */
+    .admin-main {
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+      transition: margin 0.3s ease;
+    }
+    
+    /* Cards */
+    .admin-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .admin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Stats cards */
+    .stat-card {
+      border-left: 4px solid var(--primary-blue);
+    }
+    
+    .stat-card .stat-value {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary-blue);
+    }
+    
+    /* Tables */
+    .admin-table th {
+      font-weight: 600;
+      background-color: #f8f9fa;
+      border-bottom-width: 2px;
+    }
+    
+    .admin-table tr:hover {
+      background-color: rgba(42, 164, 205, 0.05);
+    }
+    
+    /* Badges */
+    .badge-status {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.35em 0.65em;
+    }
+    
+    /* Buttons */
+    .btn-admin {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 6px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .admin-sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .admin-main {
+        margin-left: 0;
+      }
+    }
+    
+    /* Dashboard header */
+    .dashboard-header {
+      background-color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Search bar */
+    .search-bar {
+      max-width: 400px;
+    }
+    
+    /* Date picker */
+    .date-picker {
+      max-width: 250px;
+    }
   </style>
 </head>
 <body>
   <script>
-    // Access guard: only 'admin' role can view this page (placeholder)
+    // Access guard: only 'admin' role can view this page
     (function(){
       try {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
         const role = localStorage.getItem('userRole');
-        if (role !== 'admin') {
+        
+        if (!isLoggedIn || !role) {
+          alert('Vous devez être connecté pour accéder à cette page.');
           window.location.replace('../login.html');
+          return;
         }
-      } catch(_) {}
+        
+        if (role !== 'admin') {
+          alert('Accès refusé. Cette page est réservée aux administrateurs. Veuillez vous connecter avec un compte administrateur.');
+          window.location.replace('../login.html');
+          return;
+        }
+      } catch(e) {
+        console.error('Erreur lors de la vérification des permissions:', e);
+        alert('Erreur lors de la vérification des permissions. Veuillez vous reconnecter.');
+        window.location.replace('../login.html');
+      }
     })();
   </script>
+
+  <!-- Top Navigation -->
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="../../index.html">
-        <img src="../assets/images/logo_casahome.png" alt="Casa Home" height="48">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-        <span class="navbar-toggler-icon"></span>
+    <div class="container-fluid">
+      <button class="btn btn-link d-lg-none" type="button" id="sidebarToggle">
+        <i class="bi bi-list"></i>
       </button>
-      <div class="collapse navbar-collapse" id="nav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="familles.html">Espace Famille</a></li>
-          <li class="nav-item"><a class="nav-link" href="touristes.html">Espace Touriste</a></li>
-          <li class="nav-item"><a class="nav-link active" href="admin.html">Admin Entreprise</a></li>
-        </ul>
-        <div class="d-flex gap-2">
-          <a class="btn btn-outline-primary" href="../login.html">Connexion</a>
-          <a class="btn btn-primary" href="../register.html">Inscription</a>
+      <a class="navbar-brand mx-auto mx-lg-0" href="../../index.html">
+        <img src="../assets/images/logo_casahome.png" alt="Casa Home" height="40">
+      </a>
+      <div class="d-flex align-items-center">
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown">
+            <img src="../assets/images/admin-avatar.png" alt="Admin" width="32" height="32" class="rounded-circle me-2">
+            <span class="d-none d-lg-inline">Admin</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" id="adminLogoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+          </ul>
         </div>
       </div>
     </div>
   </nav>
 
-  <main class="container py-4">
-    <div class="mb-4 p-4 bg-light rounded-3">
-      <h1 class="h3 mb-1">Administration</h1>
-      <p class="mb-0 text-muted">Vue d'ensemble des familles, touristes et réservations. Validation par l'entreprise.</p>
+  <!-- Sidebar -->
+  <div class="admin-sidebar" id="adminSidebar">
+    <div class="d-flex flex-column h-100">
+      <div class="flex-grow-1">
+        <div class="sidebar-item active">
+          <i class="bi bi-speedometer2"></i>
+          <span>Tableau de bord</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-people"></i>
+          <span>Familles d'accueil</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-person"></i>
+          <span>Touristes</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-calendar-check"></i>
+          <span>Réservations</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-check-circle"></i>
+          <span>Validations</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-graph-up"></i>
+          <span>Statistiques</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-gear"></i>
+          <span>Paramètres</span>
+        </div>
+      </div>
+      <div class="p-3 text-center text-muted small">
+        Version 1.0.0
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="admin-main" id="adminMain">
+    <div class="dashboard-header">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+          <h1 class="h3 mb-1">Tableau de bord administration</h1>
+          <p class="mb-0 text-muted">Gestion des familles, touristes et réservations</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+          <div class="input-group date-picker">
+            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+            <input type="date" class="form-control" value="2025-08-01">
+            <span class="input-group-text">à</span>
+            <input type="date" class="form-control" value="2025-08-31">
+          </div>
+        </div>
+      </div>
     </div>
 
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="card admin-card stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted mb-2">Familles</h6>
+                <h3 class="stat-value mb-0">42</h3>
+              </div>
+              <div class="bg-primary bg-opacity-10 p-3 rounded">
+                <i class="bi bi-people-fill text-primary"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <span class="badge bg-success">+5 ce mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card admin-card stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted mb-2">Touristes</h6>
+                <h3 class="stat-value mb-0">128</h3>
+              </div>
+              <div class="bg-primary bg-opacity-10 p-3 rounded">
+                <i class="bi bi-person-fill text-primary"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <span class="badge bg-success">+12 ce mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card admin-card stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted mb-2">Réservations</h6>
+                <h3 class="stat-value mb-0">56</h3>
+              </div>
+              <div class="bg-primary bg-opacity-10 p-3 rounded">
+                <i class="bi bi-calendar-check-fill text-primary"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <span class="badge bg-success">+8 ce mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card admin-card stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted mb-2">À valider</h6>
+                <h3 class="stat-value mb-0">7</h3>
+              </div>
+              <div class="bg-primary bg-opacity-10 p-3 rounded">
+                <i class="bi bi-exclamation-triangle-fill text-primary"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <span class="badge bg-warning text-dark">En attente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Tabs -->
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-validations-tab" data-bs-toggle="pill" data-bs-target="#pills-validations" type="button" role="tab">Validations en attente</button>
+        <button class="nav-link active" id="validations-tab" data-bs-toggle="tab" data-bs-target="#validations" type="button" role="tab">
+          <i class="bi bi-check-circle me-1"></i>Validations
+        </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-familles-tab" data-bs-toggle="pill" data-bs-target="#pills-familles" type="button" role="tab">Familles</button>
+        <button class="nav-link" id="familles-tab" data-bs-toggle="tab" data-bs-target="#familles" type="button" role="tab">
+          <i class="bi bi-people me-1"></i>Familles
+        </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-touristes-tab" data-bs-toggle="pill" data-bs-target="#pills-touristes" type="button" role="tab">Touristes</button>
+        <button class="nav-link" id="touristes-tab" data-bs-toggle="tab" data-bs-target="#touristes" type="button" role="tab">
+          <i class="bi bi-person me-1"></i>Touristes
+        </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-reservations-tab" data-bs-toggle="pill" data-bs-target="#pills-reservations" type="button" role="tab">Réservations</button>
+        <button class="nav-link" id="reservations-tab" data-bs-toggle="tab" data-bs-target="#reservations" type="button" role="tab">
+          <i class="bi bi-calendar-check me-1"></i>Réservations
+        </button>
       </li>
     </ul>
 
-    <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="pills-validations" role="tabpanel">
-        <div class="card section-card">
+    <div class="tab-content" id="adminTabContent">
+      <!-- Validations Tab -->
+      <div class="tab-pane fade show active" id="validations" role="tabpanel">
+        <div class="card admin-card">
           <div class="card-body">
-            <h2 class="h5 mb-3">Demandes à valider</h2>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+              <h2 class="h5 mb-3 mb-md-0">Demandes en attente de validation</h2>
+              <div class="search-bar">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Rechercher...">
+                  <button class="btn btn-outline-secondary" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
             <div class="table-responsive">
-              <table class="table align-middle" id="tableValidations">
+              <table class="table admin-table">
                 <thead>
                   <tr>
                     <th>Type</th>
                     <th>Nom</th>
                     <th>Détails</th>
-                    <th class="text-end">Action</th>
+                    <th>Date</th>
+                    <th class="text-end">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <!-- Rempli en JS (démo) -->
+                <tbody id="tableValidations">
+                  <!-- Rempli en JS -->
                 </tbody>
               </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="text-muted small">Affichage 1 à 5 sur 7 demandes</div>
+              <nav>
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Précédent</a>
+                  </li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">Suivant</a>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-pane fade" id="pills-familles" role="tabpanel">
-        <div class="card section-card">
+      <!-- Familles Tab -->
+      <div class="tab-pane fade" id="familles" role="tabpanel">
+        <div class="card admin-card">
           <div class="card-body">
-            <h2 class="h5 mb-3">Familles</h2>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+              <h2 class="h5 mb-3 mb-md-0">Familles d'accueil</h2>
+              <div>
+                <button class="btn btn-primary btn-sm">
+                  <i class="bi bi-plus-circle me-1"></i>Ajouter
+                </button>
+              </div>
+            </div>
+            
             <div class="table-responsive">
-              <table class="table align-middle" id="tableFamilles">
+              <table class="table admin-table">
                 <thead>
                   <tr>
                     <th>Nom</th>
@@ -112,50 +446,85 @@
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody id="tableFamilles">
+                  <!-- Rempli en JS -->
+                </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-pane fade" id="pills-touristes" role="tabpanel">
-        <div class="card section-card">
+      <!-- Touristes Tab -->
+      <div class="tab-pane fade" id="touristes" role="tabpanel">
+        <div class="card admin-card">
           <div class="card-body">
-            <h2 class="h5 mb-3">Touristes</h2>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+              <h2 class="h5 mb-3 mb-md-0">Touristes</h2>
+              <div class="search-bar">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Rechercher...">
+                  <button class="btn btn-outline-secondary" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
             <div class="table-responsive">
-              <table class="table align-middle" id="tableTouristes">
+              <table class="table admin-table">
                 <thead>
                   <tr>
                     <th>Nom</th>
                     <th>Email</th>
+                    <th>Pays</th>
                     <th>Réservations</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody id="tableTouristes">
+                  <!-- Rempli en JS -->
+                </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-pane fade" id="pills-reservations" role="tabpanel">
-        <div class="card section-card">
+      <!-- Réservations Tab -->
+      <div class="tab-pane fade" id="reservations" role="tabpanel">
+        <div class="card admin-card">
           <div class="card-body">
-            <h2 class="h5 mb-3">Réservations</h2>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+              <h2 class="h5 mb-3 mb-md-0">Réservations</h2>
+              <div class="d-flex gap-2">
+                <select class="form-select form-select-sm" style="width: auto;">
+                  <option selected>Toutes</option>
+                  <option>Confirmées</option>
+                  <option>En attente</option>
+                  <option>Annulées</option>
+                </select>
+                <button class="btn btn-primary btn-sm">
+                  <i class="bi bi-download me-1"></i>Exporter
+                </button>
+              </div>
+            </div>
+            
             <div class="table-responsive">
-              <table class="table align-middle" id="tableReservations">
+              <table class="table admin-table">
                 <thead>
                   <tr>
                     <th>Famille</th>
                     <th>Touriste</th>
                     <th>Période</th>
+                    <th>Montant</th>
                     <th>Statut</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody id="tableReservations">
+                  <!-- Rempli en JS -->
+                </tbody>
               </table>
             </div>
           </div>
@@ -164,12 +533,13 @@
     </div>
   </main>
 
-  <footer class="mt-5" style="background:#2AA4CD;color:#fff;">
-    <div class="container py-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
-      <div>&copy; <span id="year"></span> Casa Home</div>
-      <div class="d-flex gap-3">
+  <footer class="mt-5 py-4" style="background:var(--primary-blue);color:#fff;">
+    <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">
+      <div>&copy; <span id="year"></span> Casa Home - Plateforme de tourisme communautaire</div>
+      <div class="d-flex gap-3 mt-3 mt-md-0">
         <a class="text-white text-decoration-none" href="../../index.html">Accueil</a>
         <a class="text-white text-decoration-none" href="../contact.html">Contact</a>
+        <a class="text-white text-decoration-none" href="#">Aide</a>
       </div>
     </div>
   </footer>
@@ -177,102 +547,429 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    // Jeux de données démo
+    
+    // Toggle sidebar on mobile
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      document.getElementById('adminSidebar').classList.toggle('show');
+    });
+    
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('adminSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      
+      if (window.innerWidth < 992 && 
+          !sidebar.contains(event.target) && 
+          !toggleBtn.contains(event.target)) {
+        sidebar.classList.remove('show');
+      }
+    });
+
+    // Jeux de données démo amélioré
     const validations = [
-      { type:'Famille', nom:'Famille Diatta', details:'Mise à jour tarif et photos' },
-      { type:'Réservation', nom:'Touriste: A. Dupont', details:'Séjour chez Famille Sané (2025-09-05 → 2025-09-10)' }
-    ];
-    const familles = [
-      { nom:'Famille Diatta', loc:'Ziguinchor', capacite:4, statut:'En attente' },
-      { nom:'Famille Sané', loc:'Cap Skirring', capacite:2, statut:'Active' }
-    ];
-    const touristes = [
-      { nom:'Alice Dupont', email:'alice@example.com', nb:2 },
-      { nom:'Marc Ndiaye', email:'marc@example.com', nb:1 }
-    ];
-    const reservations = [
-      { famille:'Famille Sané', touriste:'Alice Dupont', debut:'2025-09-05', fin:'2025-09-10', statut:'Confirmée' },
-      { famille:'Famille Diatta', touriste:'Marc Ndiaye', debut:'2025-08-20', fin:'2025-08-25', statut:'En attente' }
+      { 
+        type: 'Famille', 
+        nom: 'Famille Diatta', 
+        details: 'Mise à jour profil et photos', 
+        date: '2025-08-15',
+        status: 'En attente'
+      },
+      { 
+        type: 'Réservation', 
+        nom: 'Touriste: A. Dupont', 
+        details: 'Séjour chez Famille Sané', 
+        date: '2025-08-14',
+        status: 'En attente'
+      },
+      { 
+        type: 'Famille', 
+        nom: 'Famille Coly', 
+        details: 'Nouvelle inscription', 
+        date: '2025-08-12',
+        status: 'En attente'
+      },
+      { 
+        type: 'Réservation', 
+        nom: 'Touriste: M. Ndiaye', 
+        details: 'Séjour chez Famille Diatta', 
+        date: '2025-08-10',
+        status: 'En attente'
+      },
+      { 
+        type: 'Famille', 
+        nom: 'Famille Badji', 
+        details: 'Modification capacité', 
+        date: '2025-08-08',
+        status: 'En attente'
+      }
     ];
 
-    function badge(status){
-      const map={ 'Active':'success','En attente':'warning','Suspendue':'secondary','Confirmée':'success','Annulée':'secondary' };
+    const familles = [
+      { 
+        nom: 'Famille Diatta', 
+        loc: 'Ziguinchor', 
+        capacite: 4, 
+        statut: 'Active',
+        email: 'diatta@example.com',
+        phone: '+221 77 123 45 67'
+      },
+      { 
+        nom: 'Famille Sané', 
+        loc: 'Cap Skirring', 
+        capacite: 2, 
+        statut: 'Active',
+        email: 'sane@example.com',
+        phone: '+221 76 234 56 78'
+      },
+      { 
+        nom: 'Famille Badji', 
+        loc: 'Oussouye', 
+        capacite: 3, 
+        statut: 'Suspendue',
+        email: 'badji@example.com',
+        phone: '+221 70 345 67 89'
+      },
+      { 
+        nom: 'Famille Mané', 
+        loc: 'Kolda', 
+        capacite: 5, 
+        statut: 'Active',
+        email: 'mane@example.com',
+        phone: '+221 77 456 78 90'
+      },
+      { 
+        nom: 'Famille Diédhiou', 
+        loc: 'Sédhiou', 
+        capacite: 6, 
+        statut: 'En attente',
+        email: 'diedhiou@example.com',
+        phone: '+221 76 567 89 01'
+      }
+    ];
+
+    const touristes = [
+      { 
+        nom: 'Alice Dupont', 
+        email: 'alice@example.com', 
+        pays: 'France',
+        nb: 2,
+        lastVisit: '2025-08-10'
+      },
+      { 
+        nom: 'Marc Ndiaye', 
+        email: 'marc@example.com', 
+        pays: 'Sénégal',
+        nb: 1,
+        lastVisit: '2025-08-05'
+      },
+      { 
+        nom: 'Sophie Martin', 
+        email: 'sophie@example.com', 
+        pays: 'Belgique',
+        nb: 3,
+        lastVisit: '2025-07-28'
+      },
+      { 
+        nom: 'Thomas Leroy', 
+        email: 'thomas@example.com', 
+        pays: 'France',
+        nb: 1,
+        lastVisit: '2025-07-15'
+      },
+      { 
+        nom: 'Amina Sow', 
+        email: 'amina@example.com', 
+        pays: 'Canada',
+        nb: 2,
+        lastVisit: '2025-07-10'
+      }
+    ];
+
+    const reservations = [
+      { 
+        famille: 'Famille Sané', 
+        touriste: 'Alice Dupont', 
+        debut: '2025-09-05', 
+        fin: '2025-09-10',
+        montant: '75 000 FCFA',
+        statut: 'Confirmée'
+      },
+      { 
+        famille: 'Famille Diatta', 
+        touriste: 'Marc Ndiaye', 
+        debut: '2025-08-20', 
+        fin: '2025-08-25',
+        montant: '60 000 FCFA',
+        statut: 'En attente'
+      },
+      { 
+        famille: 'Famille Mané', 
+        touriste: 'Sophie Martin', 
+        debut: '2025-10-15', 
+        fin: '2025-10-20',
+        montant: '90 000 FCFA',
+        statut: 'Confirmée'
+      },
+      { 
+        famille: 'Famille Diédhiou', 
+        touriste: 'Thomas Leroy', 
+        debut: '2025-09-12', 
+        fin: '2025-09-15',
+        montant: '45 000 FCFA',
+        statut: 'Annulée'
+      },
+      { 
+        famille: 'Famille Badji', 
+        touriste: 'Amina Sow', 
+        debut: '2025-11-01', 
+        fin: '2025-11-07',
+        montant: '105 000 FCFA',
+        statut: 'Confirmée'
+      }
+    ];
+
+    // Fonction pour générer des badges colorés
+    function badge(status) {
+      const map = { 
+        'Active': 'success',
+        'En attente': 'warning',
+        'Suspendue': 'secondary',
+        'Confirmée': 'success',
+        'Annulée': 'danger'
+      };
       const color = map[status] || 'light';
       return `<span class="badge bg-${color} badge-status">${status}</span>`;
     }
-    function renderValidations(){
-      const tbody = document.querySelector('#tableValidations tbody');
+
+    // Rendu des validations
+    function renderValidations() {
+      const tbody = document.querySelector('#tableValidations');
       tbody.innerHTML = '';
-      validations.forEach((v,idx)=>{
+      
+      validations.forEach((v, idx) => {
         tbody.insertAdjacentHTML('beforeend', `
           <tr>
             <td>${v.type}</td>
-            <td>${v.nom}</td>
-            <td>${v.details}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-success me-2" onclick="valider(${idx})"><i class="bi bi-check2"></i> Valider</button>
-              <button class="btn btn-sm btn-outline-danger" onclick="rejeter(${idx})"><i class="bi bi-x"></i> Rejeter</button>
+            <td>
+              <strong>${v.nom}</strong>
+              <div class="small text-muted">${v.date}</div>
             </td>
-          </tr>`);
+            <td>${v.details}</td>
+            <td>${v.date}</td>
+            <td class="text-end">
+              <div class="d-flex gap-2 justify-content-end">
+                <button class="btn btn-sm btn-success" onclick="valider(${idx})">
+                  <i class="bi bi-check2"></i> Valider
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="rejeter(${idx})">
+                  <i class="bi bi-x"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="voirDetails(${idx}, 'validation')">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `);
       });
     }
-    function renderFamilles(){
-      const tbody = document.querySelector('#tableFamilles tbody');
-      tbody.innerHTML='';
-      familles.forEach((f,i)=>{
+
+    // Rendu des familles
+    function renderFamilles() {
+      const tbody = document.querySelector('#tableFamilles');
+      tbody.innerHTML = '';
+      
+      familles.forEach((f, idx) => {
         tbody.insertAdjacentHTML('beforeend', `
           <tr>
-            <td>${f.nom}</td>
+            <td>
+              <strong>${f.nom}</strong>
+              <div class="small text-muted">${f.email}</div>
+            </td>
             <td>${f.loc}</td>
-            <td>${f.capacite}</td>
+            <td>${f.capacite} pers.</td>
             <td>${badge(f.statut)}</td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary me-2" onclick="alert('Voir fiche de ${f.nom}')">Voir</button>
-              <button class="btn btn-sm btn-primary" onclick="toggleFamille(${i})">${f.statut==='Active'?'Désactiver':'Activer'}</button>
+              <div class="d-flex gap-2 justify-content-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="voirDetails(${idx}, 'famille')">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" onclick="editer(${idx}, 'famille')">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm ${f.statut === 'Active' ? 'btn-warning' : 'btn-success'}" 
+                        onclick="toggleStatut(${idx}, 'famille')">
+                  ${f.statut === 'Active' ? 'Suspendre' : 'Activer'}
+                </button>
+              </div>
             </td>
-          </tr>`);
+          </tr>
+        `);
       });
     }
-    function renderTouristes(){
-      const tbody = document.querySelector('#tableTouristes tbody');
-      tbody.innerHTML='';
-      touristes.forEach(t=>{
+
+    // Rendu des touristes
+    function renderTouristes() {
+      const tbody = document.querySelector('#tableTouristes');
+      tbody.innerHTML = '';
+      
+      touristes.forEach((t, idx) => {
         tbody.insertAdjacentHTML('beforeend', `
           <tr>
-            <td>${t.nom}</td>
+            <td>
+              <strong>${t.nom}</strong>
+              <div class="small text-muted">Dernière visite: ${t.lastVisit}</div>
+            </td>
             <td>${t.email}</td>
-            <td>${t.nb}</td>
-            <td class="text-end"><button class="btn btn-sm btn-outline-secondary" onclick="alert('Historique de ${t.nom}')">Historique</button></td>
-          </tr>`);
+            <td>${t.pays}</td>
+            <td>${t.nb} réservations</td>
+            <td class="text-end">
+              <div class="d-flex gap-2 justify-content-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="voirDetails(${idx}, 'touriste')">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" onclick="editer(${idx}, 'touriste')">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="supprimer(${idx}, 'touriste')">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `);
       });
     }
-    function renderReservations(){
-      const tbody = document.querySelector('#tableReservations tbody');
-      tbody.innerHTML='';
-      reservations.forEach((r,i)=>{
+
+    // Rendu des réservations
+    function renderReservations() {
+      const tbody = document.querySelector('#tableReservations');
+      tbody.innerHTML = '';
+      
+      reservations.forEach((r, idx) => {
         tbody.insertAdjacentHTML('beforeend', `
           <tr>
             <td>${r.famille}</td>
             <td>${r.touriste}</td>
-            <td><i class="bi bi-calendar3 me-1"></i>${r.debut} → ${r.fin}</td>
+            <td>
+              <i class="bi bi-calendar3 me-1"></i>${r.debut} → ${r.fin}
+            </td>
+            <td>${r.montant}</td>
             <td>${badge(r.statut)}</td>
             <td class="text-end">
-              ${r.statut==='En attente'?`<button class="btn btn-sm btn-success" onclick="confirmerReservation(${i})">Confirmer</button>`:''}
+              <div class="d-flex gap-2 justify-content-end">
+                ${r.statut === 'En attente' ? `
+                  <button class="btn btn-sm btn-success" onclick="confirmerReservation(${idx})">
+                    <i class="bi bi-check2"></i> Confirmer
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="annulerReservation(${idx})">
+                    <i class="bi bi-x"></i> Refuser
+                  </button>
+                ` : `
+                  <button class="btn btn-sm btn-outline-secondary" onclick="voirDetails(${idx}, 'reservation')">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="annulerReservation(${idx})">
+                    <i class="bi bi-x"></i> Annuler
+                  </button>
+                `}
+              </div>
             </td>
-          </tr>`);
+          </tr>
+        `);
       });
     }
-    function valider(idx){ validations.splice(idx,1); renderValidations(); alert('Demande validée.'); }
-    function rejeter(idx){ validations.splice(idx,1); renderValidations(); alert('Demande rejetée.'); }
-    function toggleFamille(i){ familles[i].statut = familles[i].statut==='Active'?'Suspendue':'Active'; renderFamilles(); }
-    function confirmerReservation(i){ reservations[i].statut='Confirmée'; renderReservations(); }
 
+    // Fonctions d'action
+    function valider(idx) {
+      const item = validations[idx];
+      alert(`Validation de ${item.nom} (${item.type})`);
+      validations.splice(idx, 1);
+      renderValidations();
+    }
+
+    function rejeter(idx) {
+      const item = validations[idx];
+      if (confirm(`Rejeter la demande de ${item.nom}?`)) {
+        validations.splice(idx, 1);
+        renderValidations();
+      }
+    }
+
+    function toggleStatut(idx, type) {
+      if (type === 'famille') {
+        const famille = familles[idx];
+        famille.statut = famille.statut === 'Active' ? 'Suspendue' : 'Active';
+        renderFamilles();
+        alert(`Statut de ${famille.nom} mis à jour: ${famille.statut}`);
+      }
+    }
+
+    function confirmerReservation(idx) {
+      reservations[idx].statut = 'Confirmée';
+      renderReservations();
+      alert('Réservation confirmée avec succès');
+    }
+
+    function annulerReservation(idx) {
+      if (confirm('Annuler cette réservation?')) {
+        reservations[idx].statut = 'Annulée';
+        renderReservations();
+      }
+    }
+
+    function voirDetails(idx, type) {
+      alert(`Voir détails de l'élément ${idx} (${type})`);
+    }
+
+    function editer(idx, type) {
+      alert(`Éditer l'élément ${idx} (${type})`);
+    }
+
+    function supprimer(idx, type) {
+      if (confirm('Supprimer cet élément?')) {
+        alert(`Suppression de l'élément ${idx} (${type})`);
+      }
+    }
+
+    // Initial render
     renderValidations();
     renderFamilles();
     renderTouristes();
     renderReservations();
   </script>
+  
+  <script>
+    // Gestion de la déconnexion admin
+    document.getElementById('adminLogoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        // Nettoyer toutes les données de session
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'admin-login.html';
+      }
+    });
+    
+    // Toggle sidebar sur mobile
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      const sidebar = document.getElementById('adminSidebar');
+      const main = document.getElementById('adminMain');
+      
+      if (window.innerWidth < 992) {
+        sidebar.style.transform = sidebar.style.transform === 'translateX(-100%)' ? 'translateX(0)' : 'translateX(-100%)';
+      }
+    });
+    
+    // Fermer sidebar sur mobile quand on clique sur un lien
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', function() {
+        if (window.innerWidth < 992) {
+          document.getElementById('adminSidebar').style.transform = 'translateX(-100%)';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
-

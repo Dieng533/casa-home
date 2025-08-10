@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Connexion Admin - Casa Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { padding: 20px; }
+    .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+    .success { background-color: #d4edda; color: #155724; }
+    .error { background-color: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test Connexion Admin</h1>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Test 1: Lecture du fichier JSON</h3>
+        <button class="btn btn-primary" onclick="testJsonFile()">Tester le fichier JSON</button>
+        <div id="jsonResult"></div>
+      </div>
+      
+      <div class="col-md-6">
+        <h3>Test 2: Test de connexion</h3>
+        <div class="mb-3">
+          <label>Email:</label>
+          <input type="email" id="testEmail" class="form-control" value="admin@casahome.com">
+        </div>
+        <div class="mb-3">
+          <label>Mot de passe:</label>
+          <input type="password" id="testPassword" class="form-control" value="admin123">
+        </div>
+        <button class="btn btn-success" onclick="testLogin()">Tester la connexion</button>
+        <div id="loginResult"></div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-12">
+        <h3>Logs de débogage</h3>
+        <div id="debugLog" style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function log(message) {
+      const debugLog = document.getElementById('debugLog');
+      const timestamp = new Date().toLocaleTimeString();
+      debugLog.innerHTML += `[${timestamp}] ${message}\n`;
+      debugLog.scrollTop = debugLog.scrollHeight;
+      console.log(message);
+    }
+
+    async function testJsonFile() {
+      const resultDiv = document.getElementById('jsonResult');
+      resultDiv.innerHTML = '<div class="test-result">Test en cours...</div>';
+      
+      try {
+        log('Test 1: Tentative de lecture du fichier admin_users.json');
+        const response = await fetch('data/admin_users.json');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        log(`Test 1: Fichier JSON lu avec succès. ${data.admins.length} administrateurs trouvés`);
+        
+        resultDiv.innerHTML = `
+          <div class="test-result success">
+            ✅ Fichier JSON lu avec succès<br>
+            Administrateurs: ${data.admins.length}<br>
+            Permissions: ${Object.keys(data.permissions).length}
+          </div>
+        `;
+        
+        // Afficher les admins
+        data.admins.forEach(admin => {
+          log(`Admin: ${admin.email} (${admin.status}) - Permissions: ${admin.permissions.join(', ')}`);
+        });
+        
+      } catch (error) {
+        log(`Test 1: Erreur - ${error.message}`);
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            ❌ Erreur: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function testLogin() {
+      const resultDiv = document.getElementById('loginResult');
+      const email = document.getElementById('testEmail').value;
+      const password = document.getElementById('testPassword').value;
+      
+      resultDiv.innerHTML = '<div class="test-result">Test de connexion en cours...</div>';
+      
+      try {
+        log(`Test 2: Tentative de connexion avec ${email}`);
+        
+        // Test 1: Lecture du fichier JSON
+        const response = await fetch('data/admin_users.json');
+        if (!response.ok) {
+          throw new Error(`Impossible de lire le fichier JSON: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const admins = data.admins || [];
+        
+        // Test 2: Recherche de l'admin
+        const admin = admins.find(a => a.email.toLowerCase() === email.toLowerCase());
+        
+        if (!admin) {
+          throw new Error('Aucun administrateur trouvé avec cet email');
+        }
+        
+        log(`Test 2: Admin trouvé - ${admin.nom} ${admin.prenom} (${admin.status})`);
+        
+        // Test 3: Vérification du statut
+        if (admin.status !== 'active') {
+          throw new Error(`Compte désactivé: ${admin.status}`);
+        }
+        
+        // Test 4: Vérification du mot de passe
+        if (admin.password !== password) {
+          throw new Error('Mot de passe incorrect');
+        }
+        
+        log(`Test 2: Connexion réussie - Permissions: ${admin.permissions.join(', ')}`);
+        
+        resultDiv.innerHTML = `
+          <div class="test-result success">
+            ✅ Connexion réussie!<br>
+            Admin: ${admin.nom} ${admin.prenom}<br>
+            Permissions: ${admin.permissions.join(', ')}
+          </div>
+        `;
+        
+        // Simuler la sauvegarde en localStorage
+        const adminData = { ...admin };
+        delete adminData.password;
+        
+        try {
+          localStorage.setItem('currentUser', JSON.stringify(adminData));
+          localStorage.setItem('userRole', adminData.role);
+          localStorage.setItem('isLoggedIn', 'true');
+          log('Test 2: Données sauvegardées en localStorage');
+        } catch (e) {
+          log(`Test 2: Erreur localStorage - ${e.message}`);
+        }
+        
+      } catch (error) {
+        log(`Test 2: Erreur - ${error.message}`);
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            ❌ Erreur de connexion: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Test automatique au chargement
+    window.addEventListener('load', function() {
+      log('Page de test chargée');
+      log('Cliquez sur "Tester le fichier JSON" pour commencer');
+    });
+  </script>
+</body>
+</html>

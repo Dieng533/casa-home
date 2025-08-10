@@ -1,0 +1,32 @@
+[
+  {
+     "id": 1,
+    "nomFamille": "Famille Diatta",
+    "localisation": "Ziguinchor, Casamance",
+    "presentation": "Description détaillée...",
+    "capacite": 4,
+    "equipements": "Wi-Fi, Salle de bain privée, Climatisation",
+    "activites": "Cuisine locale, Visite village",
+    "tarif": 12000,
+    "images": ["diatta1.jpg", "diatta2.jpg", "diatta3.jpg"],
+    "rating": 4.5,
+    "reviews": 12
+  },
+  {
+    "id": 2,
+    "nomFamille": "Famille Sané",
+    "localisation": "Cap Skirring, Casamance",
+    "presentation": "Maison moderne près des plages de Cap Skirring...",
+    "capacite": 2,
+    "equipements": "Climatisation, Piscine",
+    "activites": "Excursions nature",
+    "dateDebut": "2023-11-15",
+    "dateFin": "2024-05-15",
+    "tarif": 15000,
+    "conditions": "Demi-pension",
+    "images": ["6.jpg"],
+    "rating": 5,
+    "reviews": 8,
+    "isNew": false
+  }
+]

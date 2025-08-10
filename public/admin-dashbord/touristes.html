@@ -11,11 +11,173 @@
   <link rel="shortcut icon" href="../assets/images/logo_casahome.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary-blue:#2AA4CD; --primary-orange:#EB6F27; }
-    body { font-family:'Poppins',sans-serif; }
-    .navbar-branding { background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.08); }
-    .section-card { border:none; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.06); }
-    .badge-status { font-size:.75rem; }
+    :root {
+      --primary-blue: #2AA4CD;
+      --primary-orange: #EB6F27;
+      --light-blue: #E6F4F9;
+      --dark-blue: #1A7A9A;
+      --light-orange: #FFF4ED;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .navbar-branding {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand img {
+      height: 48px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+      transition: all 0.2s;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary-blue) !important;
+    }
+    
+    .nav-link.active {
+      color: var(--primary-blue) !important;
+      font-weight: 600;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border-color: var(--primary-orange);
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(235, 111, 39, 0.3);
+    }
+    
+    .btn-primary:hover {
+      background-color: #D96523;
+      border-color: #D96523;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(235, 111, 39, 0.4);
+    }
+    
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+      font-weight: 500;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .section-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s;
+    }
+    
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background-color: #FFF3CD;
+      color: #856404;
+    }
+    
+    .status-confirmed {
+      background-color: #D4EDDA;
+      color: #155724;
+    }
+    
+    .status-cancelled {
+      background-color: #F8D7DA;
+      color: #721C24;
+    }
+    
+    .stats-card {
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      height: 100%;
+      transition: all 0.3s;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stats-card .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .stats-card.primary {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .stats-card.secondary {
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+    }
+    
+    .stats-card.orange {
+      background-color: var(--light-orange);
+      color: var(--primary-orange);
+    }
+    
+    .table-hover tbody tr:hover {
+      background-color: rgba(42, 164, 205, 0.05);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .site-footer {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+    
+    .site-footer a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .site-footer a:hover {
+      text-decoration: underline;
+      opacity: 0.9;
+    }
+    
+    .rating {
+      color: var(--primary-orange);
+    }
+    
+    @media (max-width: 768px) {
+      .stats-card .number {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -23,77 +185,238 @@
     // Access guard: only 'tourist' role can view this page
     (function(){
       try {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
         const role = localStorage.getItem('userRole');
-        if (role !== 'tourist') {
+        
+        if (!isLoggedIn || !role) {
+          alert('Vous devez être connecté pour accéder à cette page.');
           window.location.replace('../login.html');
+          return;
         }
-      } catch(_) {}
+        
+        if (role !== 'tourist') {
+          alert('Accès refusé. Cette page est réservée aux touristes. Veuillez vous connecter avec un compte touriste.');
+          window.location.replace('../login.html');
+          return;
+        }
+      } catch(e) {
+        console.error('Erreur lors de la vérification des permissions:', e);
+        alert('Erreur lors de la vérification des permissions. Veuillez vous reconnecter.');
+        window.location.replace('../login.html');
+      }
     })();
   </script>
+  
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
       <a class="navbar-brand" href="../../index.html">
-        <img src="../assets/images/logo_casahome.png" alt="Casa Home" height="48">
+        <img src="../assets/images/logo_casahome.png" alt="Casa Home">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="familles.html">Espace Famille</a></li>
           <li class="nav-item"><a class="nav-link active" href="touristes.html">Espace Touriste</a></li>
-          <li class="nav-item"><a class="nav-link" href="admin.html">Admin Entreprise</a></li>
         </ul>
-        <div class="d-flex gap-2">
-          <a class="btn btn-outline-primary" href="../login.html">Connexion</a>
-          <a class="btn btn-primary" href="../register.html">Inscription</a>
+        <div class="d-flex align-items-center">
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../assets/images/user-avatar.jpg" alt="Profil" width="32" height="32" class="rounded-circle me-2">
+              <span class="d-none d-sm-inline">Mon compte</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+              <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profil</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </nav>
 
   <main class="container py-4">
-    <div class="mb-4 p-4 bg-light rounded-3">
-      <h1 class="h3 mb-1">Espace Touriste</h1>
-      <p class="mb-0 text-muted">Consultez vos familles réservées et suivez vos réservations.</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="h3 mb-1">Espace Touriste</h1>
+        <p class="text-muted mb-0">Bienvenue, <span id="userName">Jean Dupont</span></p>
+      </div>
+      <a href="../families.html" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>Nouvelle réservation
+      </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="stats-card primary">
+          <div class="number" id="countEnCours">0</div>
+          <div class="text-uppercase small mt-2">Réservations en cours</div>
+          <i class="bi bi-arrow-repeat d-block mt-2" style="font-size: 1.5rem;"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stats-card secondary">
+          <div class="number" id="countConfirmees">0</div>
+          <div class="text-uppercase small mt-2">Réservations confirmées</div>
+          <i class="bi bi-check-circle d-block mt-2" style="font-size: 1.5rem;"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stats-card orange">
+          <div class="number" id="totalDepense">0 FCFA</div>
+          <div class="text-uppercase small mt-2">Total dépensé</div>
+          <i class="bi bi-currency-exchange d-block mt-2" style="font-size: 1.5rem;"></i>
+        </div>
+      </div>
     </div>
 
     <div class="row g-4">
-      <div class="col-lg-4">
+      <div class="col-12">
         <div class="card section-card">
           <div class="card-body">
-            <h2 class="h6 text-uppercase text-muted">Mes chiffres</h2>
-            <div class="row text-center mt-3">
-              <div class="col-6">
-                <div class="fw-bold fs-4" id="countEnCours">0</div>
-                <div class="text-muted small">En cours</div>
-              </div>
-              <div class="col-6">
-                <div class="fw-bold fs-4" id="countConfirmees">0</div>
-                <div class="text-muted small">Confirmées</div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2 class="h5 mb-0">Mes réservations</h2>
+              <div class="d-flex align-items-center">
+                <span class="me-2 text-muted small">Filtrer :</span>
+                <select class="form-select form-select-sm" id="reservationFilter" style="width: auto;">
+                  <option value="all">Toutes</option>
+                  <option value="pending">En attente</option>
+                  <option value="confirmed">Confirmées</option>
+                  <option value="cancelled">Annulées</option>
+                  <option value="past">Passées</option>
+                </select>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-8">
-        <div class="card section-card">
-          <div class="card-body">
-            <h2 class="h5 mb-3">Mes réservations</h2>
+            
             <div class="table-responsive">
-              <table class="table align-middle">
-                <thead>
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
                   <tr>
                     <th>Famille</th>
                     <th>Période</th>
+                    <th>Personnes</th>
+                    <th>Prix total</th>
                     <th>Statut</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="reservationsBody">
-                  <!-- Rempli en JS (démo) -->
+                  <!-- Rempli dynamiquement -->
                 </tbody>
               </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="text-muted small" id="reservationCount">0 réservation(s)</div>
+              <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Précédent</a>
+                  </li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">Suivant</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Section à évaluer -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card section-card">
+          <div class="card-body">
+            <h2 class="h5 mb-4"><i class="bi bi-star-fill text-warning me-2"></i>Séjours terminés à évaluer</h2>
+            
+            <div class="row g-3" id="evaluationsBody">
+              <div class="col-md-6">
+                <div class="d-flex align-items-center p-3 border rounded-3">
+                  <img src="../assets/images/3.jpg" alt="Famille Diatta" class="user-avatar me-3">
+                  <div class="flex-grow-1">
+                    <h5 class="h6 mb-1">Famille Diatta</h5>
+                    <p class="text-muted small mb-2">12-18 août 2025 • 2 adultes</p>
+                    <div class="rating mb-2">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star"></i>
+                    </div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-primary align-self-start">Évaluer</button>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="d-flex align-items-center p-3 border rounded-3">
+                  <img src="../assets/images/6.jpg" alt="Famille Sané" class="user-avatar me-3">
+                  <div class="flex-grow-1">
+                    <h5 class="h6 mb-1">Famille Sané</h5>
+                    <p class="text-muted small mb-2">5-10 septembre 2025 • 1 adulte</p>
+                    <div class="rating mb-2">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                    </div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-primary align-self-start">Évaluer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Section favoris -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card section-card">
+          <div class="card-body">
+            <h2 class="h5 mb-4"><i class="bi bi-heart-fill text-danger me-2"></i>Mes familles favorites</h2>
+            
+            <div class="row g-3" id="favoritesBody">
+              <div class="col-md-4">
+                <div class="d-flex align-items-center p-3 border rounded-3">
+                  <img src="../assets/images/4.jpg" alt="Famille Badji" class="user-avatar me-3">
+                  <div class="flex-grow-1">
+                    <h5 class="h6 mb-1">Famille Badji</h5>
+                    <p class="text-muted small mb-0">Oussouye, Casamance</p>
+                  </div>
+                  <a href="family-details.html?id=3" class="btn btn-sm btn-outline-primary">Voir</a>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="d-flex align-items-center p-3 border rounded-3">
+                  <img src="../assets/images/8.jpg" alt="Famille Diédhiou" class="user-avatar me-3">
+                  <div class="flex-grow-1">
+                    <h5 class="h6 mb-1">Famille Diédhiou</h5>
+                    <p class="text-muted small mb-0">Sédhiou, Casamance</p>
+                  </div>
+                  <a href="family-details.html?id=5" class="btn btn-sm btn-outline-primary">Voir</a>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="d-flex align-items-center p-3 border rounded-3">
+                  <img src="../assets/images/5.jpg" alt="Famille Coly" class="user-avatar me-3">
+                  <div class="flex-grow-1">
+                    <h5 class="h6 mb-1">Famille Coly</h5>
+                    <p class="text-muted small mb-0">Ziguinchor, Casamance</p>
+                  </div>
+                  <a href="family-details.html?id=6" class="btn btn-sm btn-outline-primary">Voir</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -101,52 +424,189 @@
     </div>
   </main>
 
-  <footer class="mt-5" style="background:#2AA4CD;color:#fff;">
+  <footer class="site-footer mt-5">
     <div class="container py-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
-      <div>&copy; <span id="year"></span> Casa Home</div>
-      <div class="d-flex gap-3">
-        <a class="text-white text-decoration-none" href="../../index.html">Accueil</a>
+      <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
+      <div class="d-flex gap-3 mt-3 mt-md-0">
+        <a class="text-white text-decoration-none" href="../index.html">Accueil</a>
         <a class="text-white text-decoration-none" href="../contact.html">Contact</a>
+        <a class="text-white text-decoration-none" href="../privacy.html">Confidentialité</a>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Année courante
     document.getElementById('year').textContent = new Date().getFullYear();
-    const demoReservations = [
-      { famille:'Famille Diatta', debut:'2025-08-12', fin:'2025-08-18', statut:'En attente' },
-      { famille:'Famille Sané', debut:'2025-09-05', fin:'2025-09-10', statut:'Confirmée' }
-    ];
-    function badgeFor(status){
-      const map={ 'En attente':'warning', 'Confirmée':'success', 'Annulée':'secondary' };
-      const color = map[status] || 'light';
-      return `<span class="badge bg-${color} badge-status">${status}</span>`;
+    
+    // Fonctions utilitaires
+    function formatPrice(price) {
+      return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA';
     }
-    function render(){
+    
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+    
+    function badgeFor(status) {
+      const badges = {
+        'pending': '<span class="badge bg-warning">En attente</span>',
+        'confirmed': '<span class="badge bg-success">Confirmée</span>',
+        'cancelled': '<span class="badge bg-danger">Annulée</span>',
+        'completed': '<span class="badge bg-info">Terminée</span>'
+      };
+      return badges[status] || '<span class="badge bg-secondary">Inconnu</span>';
+    }
+    
+    // Fonction pour afficher les réservations
+    function renderReservations(filter = 'all') {
       const body = document.getElementById('reservationsBody');
       body.innerHTML = '';
-      let enCours = 0, confirmees = 0;
-      demoReservations.forEach((r,i)=>{
-        if(r.statut==='En attente') enCours++; if(r.statut==='Confirmée') confirmees++;
-        body.insertAdjacentHTML('beforeend', `
-          <tr>
-            <td>${r.famille}</td>
-            <td><i class="bi bi-calendar3 me-1"></i>${r.debut} → ${r.fin}</td>
-            <td>${badgeFor(r.statut)}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary me-2" onclick="alert('Détails de ${r.famille}');">Détails</button>
-              ${r.statut==='En attente' ? `<button class="btn btn-sm btn-primary" onclick="confirmer(${i})">Confirmer</button>` : ''}
-            </td>
-          </tr>`);
+      
+      // Récupérer les vraies réservations depuis localStorage
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+      
+      let enCours = 0, confirmees = 0, totalDepense = 0;
+      const filteredReservations = reservations.filter(res => {
+        if (filter === 'all') return true;
+        if (filter === 'pending') return res.status === 'pending';
+        if (filter === 'confirmed') return res.status === 'confirmed';
+        if (filter === 'cancelled') return res.status === 'cancelled';
+        if (filter === 'past') return res.status === 'completed';
+        return true;
       });
+      
+      if (filteredReservations.length === 0) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+              <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+              <p class="mt-2">Aucune réservation trouvée</p>
+              <a href="../families.html" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i>Faire une réservation
+              </a>
+            </td>
+          </tr>
+        `;
+      } else {
+        filteredReservations.forEach(r => {
+          if (r.status === 'pending') enCours++;
+          if (r.status === 'confirmed' || r.status === 'completed') {
+            confirmees++;
+            // Extraire le prix numérique du totalPrice
+            const priceMatch = r.totalPrice.match(/(\d+)/);
+            if (priceMatch) {
+              totalDepense += parseInt(priceMatch[1]);
+            }
+          }
+          
+          body.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="../assets/images/placeholder.jpg" alt="${r.familyName}" width="40" height="40" class="rounded-circle me-2">
+                  ${r.familyName}
+                </div>
+              </td>
+              <td><i class="bi bi-calendar3 me-1"></i>${formatDate(r.checkIn)} → ${formatDate(r.checkOut)}</td>
+              <td>${r.guests} personne${r.guests > 1 ? 's' : ''}</td>
+              <td>${r.totalPrice}</td>
+              <td>${badgeFor(r.status)}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-2" onclick="showDetails(${r.id})">
+                  <i class="bi bi-eye"></i>
+                </button>
+                ${r.status === 'pending' ? `
+                  <button class="btn btn-sm btn-success me-2" onclick="confirmReservation(${r.id})">
+                    <i class="bi bi-check"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" onclick="cancelReservation(${r.id})">
+                    <i class="bi bi-x"></i>
+                  </button>
+                ` : ''}
+                ${r.status === 'confirmed' ? `
+                  <button class="btn btn-sm btn-danger" onclick="cancelReservation(${r.id})">
+                    Annuler
+                  </button>
+                ` : ''}
+              </td>
+            </tr>
+          `);
+        });
+      }
+      
+      // Mettre à jour les compteurs
       document.getElementById('countEnCours').textContent = enCours;
       document.getElementById('countConfirmees').textContent = confirmees;
+      document.getElementById('totalDepense').textContent = formatPrice(totalDepense);
+      document.getElementById('reservationCount').textContent = `${filteredReservations.length} réservation(s)`;
     }
-    function confirmer(idx){ demoReservations[idx].statut='Confirmée'; render(); }
-    render();
+    
+    // Fonctions de gestion des réservations
+    function showDetails(id) {
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+      const res = reservations.find(r => r.id === id);
+      if (res) {
+        alert(`Détails de la réservation chez ${res.familyName}\nPériode: ${formatDate(res.checkIn)} au ${formatDate(res.checkOut)}\nPersonnes: ${res.guests}\nStatut: ${res.status}\nPrix: ${res.totalPrice}\nMessage: ${res.message || 'Aucun message'}`);
+      }
+    }
+    
+    function confirmReservation(id) {
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+      const res = reservations.find(r => r.id === id);
+      if (res) {
+        res.status = 'confirmed';
+        localStorage.setItem('reservations', JSON.stringify(reservations));
+        renderReservations(document.getElementById('reservationFilter').value);
+        alert(`Réservation chez ${res.familyName} confirmée !`);
+      }
+    }
+    
+    function cancelReservation(id) {
+      if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const res = reservations.find(r => r.id === id);
+        if (res) {
+          res.status = 'cancelled';
+          localStorage.setItem('reservations', JSON.stringify(reservations));
+          renderReservations(document.getElementById('reservationFilter').value);
+          alert(`Réservation chez ${res.familyName} annulée.`);
+        }
+      }
+    }
+    
+    // Gestion du filtre
+    document.getElementById('reservationFilter').addEventListener('change', function() {
+      renderReservations(this.value);
+    });
+    
+    // Gestion de la déconnexion
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        // Nettoyer toutes les données de session
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        window.location.href = '../login.html';
+      }
+    });
+    
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Récupérer le nom de l'utilisateur (simulation)
+      const userName = localStorage.getItem('userName') || 'Jean Dupont';
+      document.getElementById('userName').textContent = userName;
+      
+      // Afficher les réservations
+      renderReservations();
+    });
   </script>
 </body>
 </html>
-
-
