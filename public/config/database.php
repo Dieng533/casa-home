@@ -1,6 +1,6 @@
 <?php
 /**
- * Configuration de la base de données Casa Home
+ * Configuration de la base de données Teranga Home
  */
 
 class Database {

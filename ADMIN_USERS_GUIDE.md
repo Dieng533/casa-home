@@ -1,8 +1,8 @@
-# Guide des Administrateurs - Casa Home
+# Guide des Administrateurs - Teranga Home
 
 ## Vue d'ensemble
 
-Le système d'administration de Casa Home utilise un fichier JSON pour gérer les identifiants des administrateurs. Cela permet une gestion flexible et sécurisée des accès administratifs.
+Le système d'administration de Teranga Home utilise un fichier JSON pour gérer les identifiants des administrateurs. Cela permet une gestion flexible et sécurisée des accès administratifs.
 
 ## Fichier de Configuration
 

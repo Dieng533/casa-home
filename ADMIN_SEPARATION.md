@@ -1,8 +1,8 @@
-# Séparation des Espaces Administratifs - Casa Home
+# Séparation des Espaces Administratifs - Teranga Home
 
 ## Vue d'ensemble
 
-Le système d'administration de Casa Home a été restructuré pour séparer complètement les accès selon les rôles utilisateurs. Chaque type d'utilisateur ne peut accéder qu'à son espace dédié.
+Le système d'administration de Teranga Home a été restructuré pour séparer complètement les accès selon les rôles utilisateurs. Chaque type d'utilisateur ne peut accéder qu'à son espace dédié.
 
 ## Structure des Espaces Admin
 
