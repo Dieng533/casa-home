@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Familles d'accueil - Teranga Home</title>
+  <title>Familles d'accueil - Casa Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="../public/assets/images/logo_casahome.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Script Lottie pour l'animation du chatbot -->
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-web@latest/dist/dotlottie-web.js"></script>
   <style>
     :root {
       --primary-blue: #2AA4CD;
@@ -117,7 +119,7 @@
     
     /* Hero section améliorée */
     .page-hero {
-      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../assets/images/families-hero.jpg');
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../public/assets/images/families-hero.jpg');
       background-size: cover;
       background-position: center;
       border-radius: 12px;
@@ -283,7 +285,7 @@
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
       <a class="navbar-brand" href="../index.html">
-        <img src="../public/assets/images/logo_casahome.png" alt="Teranga Home Logo">
+        <img src="../public/assets/images/logo_casahome.png" alt="Casa Home Logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -695,8 +697,8 @@
       <div class="row">
         <div class="col-lg-4 mb-4 mb-lg-0">
           <h3 class="h5 mb-3 d-flex align-items-center">
-            <img src="../assets/images/logo_casahome_white.png" alt="Teranga Home Logo" height="40" class="me-2">
-            Teranga Home
+            <img src="../public/assets/images/logo_casahome_white.png" alt="Casa Home Logo" height="40" class="me-2">
+            Casa Home
           </h3>
           <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
           <div class="mt-4">
@@ -740,7 +742,7 @@
       </div>
       <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-        <div>&copy; <span id="year"></span> Teranga Home. Tous droits réservés.</div>
+        <div>&copy; <span id="year"></span> Casa Home. Tous droits réservés.</div>
         <div class="d-flex gap-3 mt-3 mt-md-0">
           <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
           <a href="#"><i class="bi bi-shield-check me-1"></i> Sécurité des données</a>
@@ -751,190 +753,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-   // Fonction pour charger les données JSON
-async function loadFamiliesData() {
-  try {
-    const response = await fetch('data/families.json');
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error loading families data:', error);
-    return []; // Retourne un tableau vide en cas d'erreur
-  }
-}
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-// Fonction pour afficher les familles
-async function displayFamilies() {
-  const familiesGrid = document.getElementById('familiesGrid');
-  const families = await loadFamiliesData();
-  
-  // Si on a des données JSON, remplacer le contenu statique
-  if (families && families.length > 0) {
-    familiesGrid.innerHTML = '';
-    
-    families.forEach(family => {
-      const imagePath = `../public/assets/images/${family.images[0]}`;
-      const ratingStars = getRatingStars(family.rating);
-      
-      const familyCard = `
-        <div class="col-md-6 col-lg-4">
-          <div class="card family-card h-100">
-            ${family.isNew ? '<span class="badge-new">Nouveau</span>' : ''}
-            <img src="${imagePath}" class="card-img-top family-img" alt="${family.nomFamille}" 
-                 onerror="this.onerror=null; this.src='../public/assets/images/placeholder.jpg';">
-            <div class="card-body position-relative pb-5">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title mb-0">${family.nomFamille}</h5>
-                <div>
-                  <span class="badge badge-capacity">${family.capacite} personnes</span>
-                  <span class="badge badge-price ms-1">${family.tarif.toLocaleString('fr-FR')} FCFA</span>
-                </div>
-              </div>
-              <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> ${family.localisation}</p>
-              <div class="rating mb-2">
-                ${ratingStars}
-                <span class="text-muted small ms-1">(${family.reviews} avis)</span>
-              </div>
-              <p class="card-text">${family.presentation.substring(0, 100)}...</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <a href="#" class="text-primary small"><i class="bi bi-heart"></i> Ajouter aux favoris</a>
-                <a href="family-details.html?id=${family.id}" class="btn btn-outline-primary btn-sm" onclick="saveFamilyToSession(${family.id})">Voir plus</a>
-              </div>
-            </div>
-          </div>
-        </div>`;
-      
-      familiesGrid.insertAdjacentHTML('beforeend', familyCard);
-    });
-  } else {
-    // Si pas de données JSON, garder les cartes statiques et ajouter les données au localStorage
-    const staticFamilies = [
-      {
-        id: 1,
-        nomFamille: "Famille Diatta",
-        localisation: "Ziguinchor, Casamance",
-        presentation: "La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie avec des repas authentiques et des activités traditionnelles.",
-        capacite: 4,
-        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Jardin",
-        activites: "Cuisine locale, Visite village, Atelier artisanat, Découverte culturelle",
-        tarif: 12000,
-        images: ["3.jpg"],
-        rating: 4.5,
-        reviews: 12,
-        isNew: true,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 2,
-        nomFamille: "Famille Sané",
-        localisation: "Cap Skirring, Casamance",
-        presentation: "Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité. Profitez de la vue sur l'océan et des plages paradisiaques.",
-        capacite: 2,
-        equipements: "Climatisation, Piscine, Wi-Fi, Salle de bain privée, Balcon",
-        activites: "Excursions nature, Plage, Pêche, Sports nautiques",
-        tarif: 15000,
-        images: ["6.jpg"],
-        rating: 5,
-        reviews: 8,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 3,
-        nomFamille: "Famille Badji",
-        localisation: "Oussouye, Casamance",
-        presentation: "Grande famille traditionnelle proposant des activités culturelles et des repas typiques. Découvrez les traditions ancestrales de la Casamance dans un environnement authentique.",
-        capacite: 6,
-        equipements: "Salle de bain partagée, Ventilateur, Terrasse, Jardin potager",
-        activites: "Cuisine locale, Visite village, Atelier artisanat, Danse traditionnelle",
-        tarif: 10000,
-        images: ["4.jpg"],
-        rating: 4.0,
-        reviews: 5,
-        isNew: true,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 4,
-        nomFamille: "Famille Mané",
-        localisation: "Kolda, Casamance",
-        presentation: "Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt et de découverte de la faune locale. Maison traditionnelle entourée de verdure.",
-        capacite: 3,
-        equipements: "Salle de bain privée, Ventilateur, Terrasse, Parking",
-        activites: "Excursions nature, Randonnée, Observation faune, Découverte botanique",
-        tarif: 9500,
-        images: ["casa2.png"],
-        rating: 4.5,
-        reviews: 7,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 5,
-        nomFamille: "Famille Diédhiou",
-        localisation: "Sédhiou, Casamance",
-        presentation: "Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove. Vivez au rythme du fleuve et découvrez les secrets de la pêche traditionnelle.",
-        capacite: 5,
-        equipements: "Salle de bain privée, Ventilateur, Terrasse sur pilotis, Embarcadère",
-        activites: "Pêche traditionnelle, Découverte mangrove, Balade en pirogue, Cuisine locale",
-        tarif: 11000,
-        images: ["8.jpg"],
-        rating: 5.0,
-        reviews: 10,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 6,
-        nomFamille: "Famille Coly",
-        localisation: "Ziguinchor, Casamance",
-        presentation: "Famille jeune et dynamique proposant des activités sportives et culturelles. Idéal pour les voyageurs actifs qui souhaitent découvrir la Casamance de manière moderne.",
-        capacite: 4,
-        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Espace sport",
-        activites: "Sports locaux, Visite culturelle, Atelier cuisine, Découverte urbaine",
-        tarif: 13500,
-        images: ["5.jpg"],
-        rating: 4.0,
-        reviews: 6,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      }
-    ];
-    
-    // Sauvegarder les données statiques dans localStorage
-    localStorage.setItem('familyListings', JSON.stringify(staticFamilies));
-  }
-}
-
-// Fonction pour sauvegarder les données de la famille en session pour un chargement plus rapide
-async function saveFamilyToSession(familyId) {
-  try {
-    // Essayer d'abord localStorage
-    const families = JSON.parse(localStorage.getItem('familyListings') || '[]');
-    let family = families.find(f => f.id == familyId);
-    
-    // Si pas trouvé, essayer de charger depuis le JSON
-    if (!family) {
-      try {
-        const response = await fetch('data/families.json');
-        if (response.ok) {
-          const jsonFamilies = await response.json();
-          family = jsonFamilies.find(f => f.id == familyId);
-        }
-      } catch (fetchError) {
-        console.log('Impossible de charger le fichier JSON, utilisation des données statiques');
-      }
-    }
-    
-    // Si toujours pas trouvé, utiliser les données statiques par défaut
-    if (!family) {
-      const staticFamilies = [
+    // Initialisation des données des familles
+    function initializeFamiliesData() {
+      const familiesData = [
         {
           id: 1,
           nomFamille: "Famille Diatta",
@@ -1032,150 +856,307 @@ async function saveFamilyToSession(familyId) {
           dateFin: "2024-12-31"
         }
       ];
-      family = staticFamilies.find(f => f.id == familyId);
+      
+      localStorage.setItem('familyListings', JSON.stringify(familiesData));
+      return familiesData;
     }
-    
-    if (family) {
-      sessionStorage.setItem(`family_${familyId}`, JSON.stringify(family));
-    }
-  } catch (error) {
-    console.error('Erreur lors de la sauvegarde en session:', error);
-  }
-}
 
-// Helper pour les étoiles de notation
-function getRatingStars(rating) {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  let stars = '';
-  
-  for (let i = 1; i <= 5; i++) {
-    if (i <= fullStars) {
-      stars += '<i class="bi bi-star-fill"></i>';
-    } else if (i === fullStars + 1 && hasHalfStar) {
-      stars += '<i class="bi bi-star-half"></i>';
-    } else {
-      stars += '<i class="bi bi-star"></i>';
-    }
-  }
-  
-  return stars;
-}
-
-// Fonction pour initialiser les données
-async function initializeData() {
-  try {
-    // Afficher les familles (avec fallback vers les données statiques)
-    await displayFamilies();
-  } catch (error) {
-    console.error('Erreur lors de l\'initialisation:', error);
-    // En cas d'erreur, s'assurer que les données statiques sont dans localStorage
-    const staticFamilies = [
-      {
-        id: 1,
-        nomFamille: "Famille Diatta",
-        localisation: "Ziguinchor, Casamance",
-        presentation: "La famille Diatta vous accueille dans leur maison traditionnelle au cœur d'un village typique. Expérience culturelle garantie avec des repas authentiques et des activités traditionnelles.",
-        capacite: 4,
-        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Jardin",
-        activites: "Cuisine locale, Visite village, Atelier artisanat, Découverte culturelle",
-        tarif: 12000,
-        images: ["3.jpg"],
-        rating: 4.5,
-        reviews: 12,
-        isNew: true,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 2,
-        nomFamille: "Famille Sané",
-        localisation: "Cap Skirring, Casamance",
-        presentation: "Maison moderne près des plages de Cap Skirring. Idéal pour les amoureux de la mer et de tranquillité. Profitez de la vue sur l'océan et des plages paradisiaques.",
-        capacite: 2,
-        equipements: "Climatisation, Piscine, Wi-Fi, Salle de bain privée, Balcon",
-        activites: "Excursions nature, Plage, Pêche, Sports nautiques",
-        tarif: 15000,
-        images: ["6.jpg"],
-        rating: 5,
-        reviews: 8,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 3,
-        nomFamille: "Famille Badji",
-        localisation: "Oussouye, Casamance",
-        presentation: "Grande famille traditionnelle proposant des activités culturelles et des repas typiques. Découvrez les traditions ancestrales de la Casamance dans un environnement authentique.",
-        capacite: 6,
-        equipements: "Salle de bain partagée, Ventilateur, Terrasse, Jardin potager",
-        activites: "Cuisine locale, Visite village, Atelier artisanat, Danse traditionnelle",
-        tarif: 10000,
-        images: ["4.jpg"],
-        rating: 4.0,
-        reviews: 5,
-        isNew: true,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 4,
-        nomFamille: "Famille Mané",
-        localisation: "Kolda, Casamance",
-        presentation: "Accueil chaleureux dans un cadre naturel préservé. Possibilité d'excursions en forêt et de découverte de la faune locale. Maison traditionnelle entourée de verdure.",
-        capacite: 3,
-        equipements: "Salle de bain privée, Ventilateur, Terrasse, Parking",
-        activites: "Excursions nature, Randonnée, Observation faune, Découverte botanique",
-        tarif: 9500,
-        images: ["casa2.png"],
-        rating: 4.5,
-        reviews: 7,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 5,
-        nomFamille: "Famille Diédhiou",
-        localisation: "Sédhiou, Casamance",
-        presentation: "Maison sur pilotis au bord du fleuve. Expérience unique de pêche et de découverte de la mangrove. Vivez au rythme du fleuve et découvrez les secrets de la pêche traditionnelle.",
-        capacite: 5,
-        equipements: "Salle de bain privée, Ventilateur, Terrasse sur pilotis, Embarcadère",
-        activites: "Pêche traditionnelle, Découverte mangrove, Balade en pirogue, Cuisine locale",
-        tarif: 11000,
-        images: ["8.jpg"],
-        rating: 5.0,
-        reviews: 10,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
-      },
-      {
-        id: 6,
-        nomFamille: "Famille Coly",
-        localisation: "Ziguinchor, Casamance",
-        presentation: "Famille jeune et dynamique proposant des activités sportives et culturelles. Idéal pour les voyageurs actifs qui souhaitent découvrir la Casamance de manière moderne.",
-        capacite: 4,
-        equipements: "Wi-Fi, Salle de bain privée, Climatisation, Terrasse, Espace sport",
-        activites: "Sports locaux, Visite culturelle, Atelier cuisine, Découverte urbaine",
-        tarif: 13500,
-        images: ["5.jpg"],
-        rating: 4.0,
-        reviews: 6,
-        isNew: false,
-        dateDebut: "2024-01-01",
-        dateFin: "2024-12-31"
+    // Fonction pour sauvegarder les données de la famille en session
+    function saveFamilyToSession(familyId) {
+      try {
+        const families = JSON.parse(localStorage.getItem('familyListings') || '[]');
+        const family = families.find(f => f.id == familyId);
+        
+        if (family) {
+          sessionStorage.setItem(`family_${familyId}`, JSON.stringify(family));
+        }
+      } catch (error) {
+        console.error('Erreur lors de la sauvegarde en session:', error);
       }
-    ];
-    localStorage.setItem('familyListings', JSON.stringify(staticFamilies));
-  }
-}
+    }
 
-// Appeler la fonction au chargement de la page
-document.addEventListener('DOMContentLoaded', initializeData);
+    // Initialiser les données au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!localStorage.getItem('familyListings')) {
+        initializeFamiliesData();
+      }
+    });
+  </script>
 
+  <!-- Chatbot Widget avec animation Lottie corrigée -->
+  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+    <dotlottie-player 
+      src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+      background="transparent" 
+      speed="1" 
+      style="width: 58px; height: 58px;" 
+      loop 
+      autoplay>
+    </dotlottie-player>
+  </div>
+  
+  <div id="chatbot-window" style="display:none; position: fixed; bottom: 110px; right: 32px; width:350px; max-width:90vw; height:440px; background:#fff; z-index:10000; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.17); border:1px solid #eee; overflow:hidden; flex-direction:column;">
+    <div style="background:#2AA4CD; color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center;">
+        <dotlottie-player 
+          src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+          background="transparent" 
+          speed="1" 
+          style="width: 32px; height: 32px; margin-right: 12px;" 
+          loop 
+          autoplay>
+        </dotlottie-player>
+        <span style="font-weight:bold;">Guide Teranga</span>
+      </div>
+      <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
+    </div>
+    <div id="chatbot-messages" style="flex:1; padding:14px; background:#f8fafd; overflow-y:auto;"></div>
+    <div style="padding:10px; background:#fafbfc; border-top:1px solid #eef1f4;">
+      <div id="chatbot-menu" style="margin-bottom:8px;">
+        <button class="btn btn-outline-primary btn-sm me-1" onclick="setChatLang('fr')">FR</button>
+        <button class="btn btn-outline-primary btn-sm me-1" onclick="setChatLang('en')">EN</button>
+        <button class="btn btn-secondary btn-sm" onclick="showFAQMenu()">Menu rapide</button>
+      </div>
+      <form id="chatbot-form" style="display:flex; gap:6px;">
+        <input id="chatbot-input" type="text" class="form-control" placeholder="Votre question..." autocomplete="off" style="flex:1;">
+        <button class="btn btn-primary" type="submit">Envoyer</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // FAQ data intégrée directement
+    let chatLang = 'fr';
+    let faqData = { 
+      fr: [
+        {
+          "question": "tourisme communautaire casamance",
+          "answer": "Le tourisme communautaire en Casamance permet de séjourner chez l'habitant et participer à la vie locale. Les revenus bénéficient directement aux communautés et préservent les traditions."
+        },
+        {
+          "question": "comment reserver hebergement",
+          "answer": "Créez un compte, consultez les familles sur la page 'Familles' et réservez en ligne. Les prix vont de 15€ à 40€ par nuit avec petit-déjeuner."
+        },
+        {
+          "question": "meilleure periode visiter casamance",
+          "answer": "La meilleure période est de novembre à mai (saison sèche), avec des températures agréables et peu de pluie."
+        },
+        {
+          "question": "destinations populaires casamance",
+          "answer": "Ziguinchor, Cap Skirring, Oussouye, l'île de Karabane, et le parc national de la Basse-Casamance."
+        },
+        {
+          "question": "plats traditionnels senegal",
+          "answer": "Riz au poisson, poulet Yassa, domoda, mafé, et fruits tropicaux comme les mangues et bananes."
+        },
+        {
+          "question": "visa senegal",
+          "answer": "Les ressortissants UE, Canada et USA n'ont pas besoin de visa pour moins de 90 jours. Passeport valide requis."
+        },
+        {
+          "question": "activites culturelles",
+          "answer": "Danse traditionnelle, tissage, cuisine locale, visite de marchés, et cérémonies selon la période."
+        },
+        {
+          "question": "comment payer",
+          "answer": "Paiements sécurisés en ligne par carte bancaire ou virement. 80% revient directement aux familles."
+        },
+        {
+          "question": "transport casamance",
+          "answer": "Taxis-brousse, pirogues pour les îles, et location de véhicules. Nous aidons à organiser votre transport."
+        },
+        {
+          "question": "hebergements proposes",
+          "answer": "Chambres chez l'habitant, cases traditionnelles, et écolodges gérés par les communautés locales."
+        },
+        {
+          "question": "familles d accueil casamance",
+          "answer": "Nous proposons 6 familles d'accueil soigneusement sélectionnées dans différentes régions de Casamance. Chaque famille offre une expérience unique d'immersion culturelle."
+        },
+        {
+          "question": "prix hebergement famille",
+          "answer": "Les tarifs varient de 9 500 FCFA à 15 000 FCFA par nuit selon la famille, la saison et les équipements proposés."
+        },
+        {
+          "question": "comment choisir famille",
+          "answer": "Consultez nos fiches détaillées avec photos, équipements, activités proposées et avis des voyageurs pour choisir la famille qui correspond à vos attentes."
+        }
+      ],
+      en: [
+        {
+          "question": "community tourism casamance", 
+          "answer": "Community tourism in Casamance involves staying with local families and participating in community life. Revenue directly benefits local communities."
+        },
+        {
+          "question": "how to book accommodation",
+          "answer": "Create an account, browse families on the 'Families' page, and book online. Prices range from €15 to €40 per night with breakfast."
+        },
+        {
+          "question": "best time to visit casamance",
+          "answer": "The best period is from November to May (dry season), with pleasant temperatures and little rain."
+        },
+        {
+          "question": "host families casamance",
+          "answer": "We offer 6 carefully selected host families in different regions of Casamance. Each family provides a unique cultural immersion experience."
+        }
+      ]
+    };
+
+    // Éléments DOM
+    const bubble = document.getElementById('chatbot-bubble');
+    const windowEl = document.getElementById('chatbot-window');
+    const closeBtn = document.getElementById('chatbot-close');
+    const form = document.getElementById('chatbot-form');
+    const input = document.getElementById('chatbot-input');
+    const messages = document.getElementById('chatbot-messages');
+
+    // Gestionnaires d'événements
+    bubble.onclick = () => {
+      windowEl.style.display = 'flex';
+      bubble.style.display = 'none';
+      showWelcome();
+    };
+
+    closeBtn.onclick = () => {
+      windowEl.style.display = 'none';
+      bubble.style.display = 'flex';
+    };
+
+    function setChatLang(lang) {
+      chatLang = lang;
+      showWelcome();
+    }
+
+    function showWelcome() {
+      messages.innerHTML = '';
+      addBotMsg(chatLang === 'fr'
+        ? '👋 Bonjour ! Je suis votre Guide Teranga. Posez-moi vos questions sur les familles d\'accueil en Casamance, les tarifs, ou utilisez le menu rapide !'
+        : '👋 Hello! I am your Teranga Guide. Ask me about host families in Casamance, prices, or use the quick menu!');
+    }
+
+    function showFAQMenu() {
+      addBotMsg(chatLang === 'fr'
+        ? '<b>📋 Menu rapide</b><br>• Familles d\'accueil<br>• Tarifs et réservation<br>• Équipements proposés<br>• Activités culturelles<br>• Localisations<br>• Comment choisir'
+        : '<b>📋 Quick Menu</b><br>• Host families<br>• Prices and booking<br>• Available equipment<br>• Cultural activities<br>• Locations<br>• How to choose'
+      );
+    }
+
+    function addBotMsg(text) {
+      const msg = document.createElement('div');
+      msg.style = 'margin:8px 0; text-align:left;';
+      msg.innerHTML = `<span style='background:#E6F4F9; color:#2AA4CD; padding:7px 14px; border-radius:16px 16px 16px 6px; display:inline-block; max-width:90%;'>${text}</span>`;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addUserMsg(text) {
+      const msg = document.createElement('div');
+      msg.style = 'margin:8px 0; text-align:right;';
+      msg.innerHTML = `<span style='background:#EB6F27; color:#fff; padding:7px 14px; border-radius:16px 16px 6px 16px; display:inline-block; max-width:90%;'>${text}</span>`;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Normalisation du texte pour la recherche
     function normalizeTxt(str) {
-      return str
-        .toLowerCase()
-        .normalize('NFD').replace(/[ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      return str.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Recherche améliorée dans la FAQ
+    function faqMatch(question, lang) {
+      const userQ = normalizeTxt(question);
+      
+      // Recherche exacte d'abord
+      for (const faq of faqData[lang]) {
+        if (normalizeTxt(faq.question).includes(userQ) || userQ.includes(normalizeTxt(faq.question))) {
+          return faq;
+        }
+      }
+      
+      // Recherche par mots-clés
+      let bestMatch = null;
+      let bestScore = 0;
+      
+      for (const faq of faqData[lang]) {
+        const faqQ = normalizeTxt(faq.question);
+        const userWords = userQ.split(' ');
+        const faqWords = faqQ.split(' ');
+        
+        let score = 0;
+        for (const userWord of userWords) {
+          if (userWord.length > 3) {
+            for (const faqWord of faqWords) {
+              if (faqWord.includes(userWord) || userWord.includes(faqWord)) {
+                score += userWord.length;
+                break;
+              }
+            }
+          }
+        }
+        
+        if (score > bestScore && score > 2) {
+          bestScore = score;
+          bestMatch = faq;
+        }
+      }
+      
+      return bestMatch;
+    }
+
+    // Gestion du formulaire
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const txt = input.value.trim();
+      if (!txt) return;
+      
+      addUserMsg(txt);
+      input.value = '';
+      
+      // Simulation de délai de traitement
+      setTimeout(() => {
+        const reply = faqMatch(txt, chatLang);
+        
+        if (reply) {
+          addBotMsg(reply.answer);
+        } else {
+          // Réponses intelligentes par défaut
+          const lowerTxt = txt.toLowerCase();
+          
+          if (lowerTxt.includes('bonjour') || lowerTxt.includes('hello') || lowerTxt.includes('salut')) {
+            addBotMsg(chatLang === 'fr' ? 
+              "Bonjour ! 😊 Je suis ravi de vous aider à découvrir les familles d'accueil en Casamance. Posez-moi vos questions sur les tarifs, les équipements ou les activités !" :
+              "Hello! 😊 I'm happy to help you discover host families in Casamance. Ask me about prices, equipment or activities!");
+          } 
+          else if (lowerTxt.includes('merci') || lowerTxt.includes('thank')) {
+            addBotMsg(chatLang === 'fr' ?
+              "Avec plaisir ! N'hésitez pas si vous avez d'autres questions sur nos familles d'accueil. Bonne découverte ! 🌴" :
+              "You're welcome! Feel free to ask if you have other questions about our host families. Enjoy your discovery! 🌴");
+          }
+          else if (lowerTxt.includes('prix') || lowerTxt.includes('tarif') || lowerTxt.includes('combien') || lowerTxt.includes('price') || lowerTxt.includes('cost')) {
+            addBotMsg(chatLang === 'fr' ?
+              "💰 Les hébergements chez l'habitant vont de 9 500 FCFA à 15 000 FCFA par nuit. Les tarifs varient selon la famille, la saison et les équipements. Consultez nos fiches détaillées pour plus d'informations !" :
+              "💰 Homestay accommodation ranges from 9,500 FCFA to 15,000 FCFA per night. Prices vary by family, season and equipment. Check our detailed listings for more information!");
+          }
+          else if (lowerTxt.includes('famille') || lowerTxt.includes('family') || lowerTxt.includes('accueil') || lowerTxt.includes('host')) {
+            addBotMsg(chatLang === 'fr' ?
+              "🏠 Nous proposons 6 familles d'accueil soigneusement sélectionnées en Casamance. Chaque famille offre une expérience unique : maison traditionnelle, bord de mer, sur pilotis... Découvrez leurs profils détaillés sur cette page !" :
+              "🏠 We offer 6 carefully selected host families in Casamance. Each family offers a unique experience: traditional house, seaside, on stilts... Discover their detailed profiles on this page!");
+          }
+          else {
+            addBotMsg(chatLang === 'fr' ?
+              "Je suis spécialisé sur les familles d'accueil en Casamance. Posez-moi des questions sur :<br>• Les tarifs et disponibilités<br>• Les équipements proposés<br>• Les activités culturelles<br>• Comment réserver<br>• Les avis des voyageurs" :
+              "I specialize in host families in Casamance. Ask me about:<br>• Prices and availability<br>• Equipment offered<br>• Cultural activities<br>• How to book<br>• Traveler reviews");
+          }
+        }
+      }, 800);
+    }
+
+    // Initialisation
+    showWelcome();
+  </script>
+</body>
+</html>

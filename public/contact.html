@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="../public/assets/images/logo_casahome.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Script Lottie pour l'animation du chatbot -->
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-web@latest/dist/dotlottie-web.js"></script>
   <style>
     :root {
       --primary-blue: #2AA4CD;
@@ -35,7 +37,7 @@
     }
     
     .navbar-brand img {
-      height: 40px;
+      height: 60px;
       margin-right: 10px;
     }
     
@@ -101,7 +103,7 @@
     
     /* Styles spécifiques à la page contact */
     .contact-hero {
-      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('assets/images/casa2.png');
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../public/assets/images/casa2.png');
       background-size: cover;
       background-position: center;
       color: white;
@@ -161,8 +163,7 @@
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
       <a class="navbar-brand" href="../index.html">
-        <img src="assets/images/logo_casahome.png" alt="Teranga Home Logo">
-        Teranga Home
+        <img src="../public/assets/images/logo_casahome.png" alt="Teranga Home Logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -187,7 +188,7 @@
       <div class="row align-items-center">
         <div class="col-lg-8">
           <h1 class="fw-bold mb-3">Contactez-nous</h1>
-          <p class="lead mb-4">Nous sommes là pour répondre à vos questions et vous aider à organiser votre séjour en Casamance.</p>
+          <p class="lead mb-4">Nous sommes là pour répondre à vos questions et vous aider à organiser votre séjour au Sénégal.</p>
         </div>
       </div>
     </div>
@@ -224,9 +225,9 @@
           <div class="contact-icon mx-auto">
             <i class="bi bi-chat-dots"></i>
           </div>
-          <h5 class="fw-bold mb-3"><a href="chat.html">Chat en direct</a></h5>
+          <h5 class="fw-bold mb-3">Chat en direct</h5>
           <p class="mb-3">Disponible 7j/7</p>
-          <a href="#" class="btn btn-primary">Ouvrir le chat</a>
+          <a href="#" class="btn btn-primary" onclick="openChatbot()">Ouvrir le chat</a>
         </div>
       </div>
     </div>
@@ -236,7 +237,7 @@
       <div class="col-lg-7">
         <div class="contact-form h-100">
           <h3 class="fw-bold mb-4">Envoyez-nous un message</h3>
-          <form>
+          <form id="contactForm">
             <div class="row g-3">
               <div class="col-md-6">
                 <label for="firstName" class="form-label">Prénom</label>
@@ -284,8 +285,8 @@
         <div class="card h-100 border-0 shadow-sm">
           <div class="card-body p-0">
             <div class="map-container">
-              <!-- Intégration de la carte (ex: Google Maps) -->
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.274346011854!2d-16.26655742557835!3d12.5641531236816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee79110d8ab3a63%3A0x156053c2df89f524!2sBignona!5e0!3m2!1sfr!2ssn!4v1754752654787!5m2!1sfr!2ssn" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3894.274346011854!2d-16.26655742557835!3d12.5641531236816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee79110d8ab3a63%3A0x156053c2df89f524!2sBignona!5e0!3m2!1sfr!2ssn!4v1754752654787!5m2!1sfr!2ssn" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
           </div>
           <div class="card-footer bg-white">
             <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Notre adresse</h5>
@@ -353,58 +354,88 @@
 
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer mt-5">
-    <div class="container py-4">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h3 class="h5 mb-3 d-flex align-items-center">
+            <img src="../public/assets/images/logo_casahome_white.png" alt="Teranga Home Logo" height="40" class="me-2">
+            Teranga Home
+          </h3>
+          <p>Plateforme de tourisme communautaire et solidaire au Sénégal. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+          <div class="mt-4">
+            <a href="#" class="text-white me-3" aria-label="Facebook"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3" aria-label="Instagram"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3" aria-label="Twitter"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white" aria-label="YouTube"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Navigation</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="../index.html">Accueil</a></li>
+            <li class="mb-2"><a href="families.html">Familles</a></li>
+            <li class="mb-2"><a href="search.html">Recherche</a></li>
+            <li class="mb-2"><a href="../index.html#services">Services</a></li>
+            <li class="mb-2"><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="h6 mb-3">Informations</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="about.html">À propos</a></li>
+            <li class="mb-2"><a href="how-it-works.html">Comment ça marche</a></li>
+            <li class="mb-2"><a href="blog.html">Blog</a></li>
+            <li class="mb-2"><a href="faq.html">FAQ</a></li>
+            <li class="mb-2"><a href="pricing.html">Tarifs</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="h6 mb-3">Légal</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="terms.html">Conditions générales</a></li>
+            <li class="mb-2"><a href="privacy.html">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="legal.html">Mentions légales</a></li>
+            <li class="mb-2"><a href="cookies.html">Cookies</a></li>
+            <li class="mb-2"><a href="sitemap.html">Plan du site</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-        <div>&copy; <span id="year"></span> Teranga Home</div>
+        <div>&copy; <span id="year"></span> Teranga Home. Tous droits réservés.</div>
         <div class="d-flex gap-3 mt-3 mt-md-0">
-          <a href="contact.html">Contact</a>
-          <a href="#">Mentions légales</a>
-          <a href="#">Politique de confidentialité</a>
+          <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+          <a href="#"><i class="bi bi-shield-check me-1"></i> Sécurité des données</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Année dynamique
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Validation simple du formulaire
-    (function() {
-      const form = document.querySelector('.contact-form form');
-      if (!form) return;
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const required = form.querySelectorAll('[required]');
-        let valid = true;
-        required.forEach(el => {
-          if (!el.value.trim()) {
-            el.classList.add('is-invalid');
-            valid = false;
-          } else {
-            el.classList.remove('is-invalid');
-          }
-        });
-        if (valid) {
-          const btn = form.querySelector('button[type="submit"]');
-          if (btn) btn.disabled = true;
-          alert('Merci, votre message a été envoyé.');
-          form.reset();
-          if (btn) btn.disabled = false;
-        }
-      });
-    })();
-  </script>
-  <!-- Chatbot Widget (début) -->
-  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-    <img src="../assets/images/logo_casahome.png" alt="Bot" style="width:36px; height:36px; border-radius:50%;">
+  <!-- Chatbot Widget avec Lottie -->
+  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+    <dotlottie-player 
+      src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+      background="transparent" 
+      speed="1" 
+      style="width: 58px; height: 58px;" 
+      loop 
+      autoplay>
+    </dotlottie-player>
   </div>
+  
   <div id="chatbot-window" style="display:none; position: fixed; bottom: 110px; right: 32px; width:350px; max-width:90vw; height:440px; background:#fff; z-index:10000; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.17); border:1px solid #eee; overflow:hidden; flex-direction:column;">
     <div style="background:#2AA4CD; color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; align-items:center;">
-        <img src="../assets/images/logo_casahome.png" alt="Bot" style="width:32px; height:32px; border-radius:50%; margin-right:12px;">
+        <dotlottie-player 
+          src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+          background="transparent" 
+          speed="1" 
+          style="width: 32px; height: 32px; margin-right: 12px;" 
+          loop 
+          autoplay>
+        </dotlottie-player>
         <span style="font-weight:bold;">Guide Teranga</span>
       </div>
       <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
@@ -422,105 +453,253 @@
       </form>
     </div>
   </div>
-  <!-- Chatbot Widget (fin) -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Validation du formulaire de contact
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validation simple
+      const required = this.querySelectorAll('[required]');
+      let valid = true;
+      
+      required.forEach(el => {
+        if (!el.value.trim()) {
+          el.classList.add('is-invalid');
+          valid = false;
+        } else {
+          el.classList.remove('is-invalid');
+        }
+      });
+      
+      if (valid) {
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Envoi...';
+        
+        // Simulation d'envoi
+        setTimeout(() => {
+          alert('Merci ! Votre message a été envoyé. Nous vous répondrons dans les plus brefs délais.');
+          this.reset();
+          btn.disabled = false;
+          btn.innerHTML = 'Envoyer le message';
+        }, 2000);
+      }
+    });
+
+    // Fonction pour ouvrir le chatbot depuis le bouton
+    function openChatbot() {
+      const bubble = document.getElementById('chatbot-bubble');
+      const windowEl = document.getElementById('chatbot-window');
+      windowEl.style.display = 'flex';
+      bubble.style.display = 'none';
+      showWelcome();
+    }
+
+    // FAQ data intégrée pour la page contact
     let chatLang = 'fr';
-    let faqData = { fr: [], en: [] };
+    let faqData = { 
+      fr: [
+        {
+          "question": "contact teranga home",
+          "answer": "Vous pouvez nous contacter par téléphone au +221 33 123 45 67, par email à contact@terangahome.sn, ou via notre chat en direct. Nous sommes disponibles du lundi au vendredi de 9h à 18h."
+        },
+        {
+          "question": "urgence voyage senegal",
+          "answer": "En cas d'urgence pendant votre séjour, contactez notre assistance 24h/24 au +221 77 123 45 67. Nous avons une équipe dédiée pour vous aider en cas de problème."
+        },
+        {
+          "question": "probleme reservation",
+          "answer": "Si vous rencontrez un problème avec votre réservation, contactez-nous immédiatement par téléphone ou email. Nous ferons le nécessaire pour résoudre la situation rapidement."
+        },
+        {
+          "question": "partenariat teranga home",
+          "answer": "Vous souhaitez devenir partenaire ? Contactez-nous à partenariat@terangahome.sn avec les détails de votre proposition. Nous étudions toutes les collaborations."
+        },
+        {
+          "question": "reclamation service",
+          "answer": "Pour toute réclamation concernant nos services, écrivez-nous à reclamation@terangahome.sn. Nous traitons chaque demande dans les 48 heures."
+        },
+        {
+          "question": "aide technique site",
+          "answer": "Problème technique sur le site ? Contactez notre support technique à support@terangahome.sn en décrivant le problème rencontré."
+        },
+        {
+          "question": "delai reponse contact",
+          "answer": "Nous répondons à tous les emails dans un délai de 24 heures maximum. Pour les urgences, privilégiez le téléphone."
+        }
+      ],
+      en: [
+        {
+          "question": "contact teranga home",
+          "answer": "You can contact us by phone at +221 33 123 45 67, by email at contact@terangahome.sn, or via our live chat. We are available Monday to Friday from 9am to 6pm."
+        },
+        {
+          "question": "travel emergency senegal",
+          "answer": "In case of emergency during your stay, contact our 24/7 assistance at +221 77 123 45 67. We have a dedicated team to help you in case of problems."
+        }
+      ]
+    };
+
+    // Éléments DOM du chatbot
     const bubble = document.getElementById('chatbot-bubble');
     const windowEl = document.getElementById('chatbot-window');
     const closeBtn = document.getElementById('chatbot-close');
     const form = document.getElementById('chatbot-form');
     const input = document.getElementById('chatbot-input');
     const messages = document.getElementById('chatbot-messages');
-    async function loadFaq(lang) {
-      if (faqData[lang].length > 0) return;
-      const file = lang === 'fr' ? '../data/faq_fr.json' : '../data/faq_en.json';
-      try {
-        const res = await fetch(file);
-        if (res.ok) {
-          faqData[lang] = await res.json();
-        }
-      } catch (err) { }
-    }
-    bubble.onclick = async () => {
+
+    // Gestionnaires d'événements du chatbot
+    bubble.onclick = () => {
       windowEl.style.display = 'flex';
       bubble.style.display = 'none';
-      await loadFaq(chatLang);
       showWelcome();
     };
+
     closeBtn.onclick = () => {
       windowEl.style.display = 'none';
       bubble.style.display = 'flex';
     };
+
     function setChatLang(lang) {
       chatLang = lang;
-      loadFaq(lang);
       showWelcome();
     }
+
     function showWelcome() {
       messages.innerHTML = '';
       addBotMsg(chatLang === 'fr'
-        ? '👋 Bonjour, je suis votre Guide Teranga ! Posez-moi vos questions sur le Sénégal (itinéraires, hébergements, culture...). Vous pouvez aussi utiliser le menu rapide.'
-        : '👋 Hello, I am your Teranga Guide! Ask me about Senegal (routes, accommodation, culture...). You can also use the quick menu.');
+        ? '👋 Bonjour ! Je suis votre Guide Teranga. Comment puis-je vous aider ? Posez-moi vos questions sur nos services, les réservations, ou utilisez le menu rapide !'
+        : '👋 Hello! I am your Teranga Guide. How can I help you? Ask me about our services, bookings, or use the quick menu!');
     }
+
     function showFAQMenu() {
       addBotMsg(chatLang === 'fr'
-        ? '<b>Menu rapide</b><ul><li>Destinations touristiques</li><li>Hébergement</li><li>Météo</li><li>Culture & événements</li><li>Conseils pratiques</li></ul>'
-        : '<b>Quick Menu</b><ul><li>Touristic destinations</li><li>Accommodation</li><li>Weather</li><li>Culture & events</li><li>Practical tips</li></ul>'
+        ? '<b>📋 Menu rapide</b><br>• Contact et assistance<br>• Problèmes de réservation<br>• Urgences voyage<br>• Demandes de partenariat<br>• Support technique<br>• Réclamations'
+        : '<b>📋 Quick Menu</b><br>• Contact and assistance<br>• Booking issues<br>• Travel emergencies<br>• Partnership requests<br>• Technical support<br>• Complaints'
       );
     }
+
     function addBotMsg(text) {
       const msg = document.createElement('div');
       msg.style = 'margin:8px 0; text-align:left;';
-      msg.innerHTML = `<span style='background:#E6F4F9; color:#2AA4CD; padding:7px 14px; border-radius:16px 16px 16px 6px; display:inline-block; max-width:90%;'>` + text + "</span>";
+      msg.innerHTML = `<span style='background:#E6F4F9; color:#2AA4CD; padding:7px 14px; border-radius:16px 16px 16px 6px; display:inline-block; max-width:90%;'>${text}</span>`;
       messages.appendChild(msg);
       messages.scrollTop = messages.scrollHeight;
     }
+
     function addUserMsg(text) {
       const msg = document.createElement('div');
       msg.style = 'margin:8px 0; text-align:right;';
-      msg.innerHTML = `<span style='background:#EB6F27; color:#fff; padding:7px 14px; border-radius:16px 16px 6px 16px; display:inline-block; max-width:90%;'>` + text + "</span>";
+      msg.innerHTML = `<span style='background:#EB6F27; color:#fff; padding:7px 14px; border-radius:16px 16px 6px 16px; display:inline-block; max-width:90%;'>${text}</span>`;
       messages.appendChild(msg);
       messages.scrollTop = messages.scrollHeight;
     }
+
+    // Normalisation du texte pour la recherche
     function normalizeTxt(str) {
-      return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').trim();
+      return str.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
+
+    // Recherche améliorée dans la FAQ
     function faqMatch(question, lang) {
       const userQ = normalizeTxt(question);
-      let maxScore = 0;
-      let best = null;
+      
+      // Recherche exacte d'abord
       for (const faq of faqData[lang]) {
-        const faqQ = normalizeTxt(faq.question);
-        let score = 0;
-        for (const word of userQ.split(' ')) {
-          if (faqQ.includes(word) && word.length > 2) score++;
-        }
-        if (score > maxScore) {
-          maxScore = score;
-          best = faq;
+        if (normalizeTxt(faq.question).includes(userQ) || userQ.includes(normalizeTxt(faq.question))) {
+          return faq;
         }
       }
-      if (maxScore >= 2) return best;
-      return null;
+      
+      // Recherche par mots-clés
+      let bestMatch = null;
+      let bestScore = 0;
+      
+      for (const faq of faqData[lang]) {
+        const faqQ = normalizeTxt(faq.question);
+        const userWords = userQ.split(' ');
+        const faqWords = faqQ.split(' ');
+        
+        let score = 0;
+        for (const userWord of userWords) {
+          if (userWord.length > 3) {
+            for (const faqWord of faqWords) {
+              if (faqWord.includes(userWord) || userWord.includes(faqWord)) {
+                score += userWord.length;
+                break;
+              }
+            }
+          }
+        }
+        
+        if (score > bestScore && score > 2) {
+          bestScore = score;
+          bestMatch = faq;
+        }
+      }
+      
+      return bestMatch;
     }
-    form.onsubmit = async (e) => {
+
+    // Gestion du formulaire du chatbot
+    form.onsubmit = (e) => {
       e.preventDefault();
       const txt = input.value.trim();
       if (!txt) return;
+      
       addUserMsg(txt);
       input.value = '';
-      await loadFaq(chatLang);
-      const reply = faqMatch(txt, chatLang);
-      if (reply) {
-        addBotMsg(reply.answer);
-      } else {
-        addBotMsg(chatLang === 'fr' ?
-          "Je n'ai pas trouvé la réponse dans ma FAQ locale. Prochaine étape : connexion à l'intelligence OpenAI ! 😊"
-          : "I couldn’t find the answer in my local FAQ. Next step: connection to OpenAI intelligence! 😊");
-      }
+      
+      // Simulation de délai de traitement
+      setTimeout(() => {
+        const reply = faqMatch(txt, chatLang);
+        
+        if (reply) {
+          addBotMsg(reply.answer);
+        } else {
+          // Réponses intelligentes par défaut
+          const lowerTxt = txt.toLowerCase();
+          
+          if (lowerTxt.includes('bonjour') || lowerTxt.includes('hello') || lowerTxt.includes('salut')) {
+            addBotMsg(chatLang === 'fr' ? 
+              "Bonjour ! 😊 Je suis ravi de vous aider. Posez-moi vos questions sur nos services de contact, les réservations ou toute autre demande !" :
+              "Hello! 😊 I'm happy to help you. Ask me about our contact services, bookings or any other request!");
+          } 
+          else if (lowerTxt.includes('merci') || lowerTxt.includes('thank')) {
+            addBotMsg(chatLang === 'fr' ?
+              "Avec plaisir ! N'hésitez pas si vous avez d'autres questions. Bonne journée ! 🌟" :
+              "You're welcome! Feel free to ask if you have other questions. Have a great day! 🌟");
+          }
+          else if (lowerTxt.includes('urgence') || lowerTxt.includes('urgence') || lowerTxt.includes('emergency')) {
+            addBotMsg(chatLang === 'fr' ?
+              "🚨 Pour les urgences, contactez immédiatement notre assistance 24h/24 au +221 77 123 45 67. Nous sommes là pour vous aider !" :
+              "🚨 For emergencies, immediately contact our 24/7 assistance at +221 77 123 45 67. We are here to help you!");
+          }
+          else if (lowerTxt.includes('reservation') || lowerTxt.includes('booking') || lowerTxt.includes('reserver')) {
+            addBotMsg(chatLang === 'fr' ?
+              "📅 Pour toute question sur les réservations, vous pouvez nous contacter au +221 33 123 45 67 ou par email à reservation@terangahome.sn" :
+              "📅 For any questions about bookings, you can contact us at +221 33 123 45 67 or by email at reservation@terangahome.sn");
+          }
+          else {
+            addBotMsg(chatLang === 'fr' ?
+              "Je suis spécialisé dans l'assistance et le support. Posez-moi des questions sur :<br>• Nos coordonnées et horaires<br>• Les problèmes de réservation<br>• Les urgences voyage<br>• Le support technique<br>• Les demandes de partenariat" :
+              "I specialize in assistance and support. Ask me about:<br>• Our contact details and hours<br>• Booking issues<br>• Travel emergencies<br>• Technical support<br>• Partnership requests");
+          }
+        }
+      }, 800);
     }
-    loadFaq(chatLang).then(() => showWelcome());
+
+    // Initialisation
+    showWelcome();
   </script>
 </body>
 </html>

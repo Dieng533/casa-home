@@ -8,8 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="shortcut icon" href="./assets/images/logo_casahome.png" type="image/x-icon">
+  <link rel="shortcut icon" href="../public/assets/images/logo_casahome.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Script Lottie pour l'animation du chatbot -->
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-web@latest/dist/dotlottie-web.js"></script>
   <style>
     :root {
       --primary-blue: #2AA4CD;
@@ -35,7 +37,7 @@
     }
     
     .navbar-brand img {
-      height: 40px;
+      height: 60px;
       margin-right: 10px;
     }
     
@@ -101,7 +103,7 @@
     
     /* Styles spécifiques à la page recherche */
     .search-hero {
-      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../assets/images/search-bg.jpg');
+      background: linear-gradient(rgba(42, 164, 205, 0.9), rgba(42, 164, 205, 0.7)), url('../public/assets/images/search-bg.jpg');
       background-size: cover;
       background-position: center;
       color: white;
@@ -152,13 +154,50 @@
     .result-item:hover {
       background-color: var(--light-blue);
     }
+
+    .destination-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .destination-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .destination-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .destination-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .destination-card-content {
+      padding: 1.5rem;
+    }
+
+    .destination-type {
+      color: var(--primary-orange);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body>
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-branding sticky-top">
     <div class="container">
-       <a class="navbar-brand" href="../index.html">
+      <a class="navbar-brand" href="../index.html">
         <img src="../public/assets/images/logo_casahome.png" alt="Teranga Home Logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -183,8 +222,8 @@
     <div class="search-hero">
       <div class="row align-items-center">
         <div class="col-lg-8">
-          <h1 class="fw-bold mb-3">Trouvez l'expérience parfaite</h1>
-          <p class="lead mb-4">Recherchez des hébergements, des activités et des guides locaux en Casamance</p>
+          <h1 class="fw-bold mb-3">Découvrez le Sénégal authentique</h1>
+          <p class="lead mb-4">Explorez les sites touristiques, hébergements et expériences uniques à travers tout le Sénégal</p>
         </div>
       </div>
     </div>
@@ -196,17 +235,18 @@
           <div class="row g-3">
             <div class="col-md-6">
               <label for="searchQuery" class="form-label">Que recherchez-vous ?</label>
-              <input type="text" class="form-control form-control-lg" id="searchQuery" placeholder="Hébergement, activité, guide...">
+              <input type="text" class="form-control form-control-lg" id="searchQuery" placeholder="Destination, activité, hébergement...">
             </div>
             <div class="col-md-3">
-              <label for="location" class="form-label">Localisation</label>
+              <label for="location" class="form-label">Région</label>
               <select class="form-select form-select-lg" id="location">
-                <option selected>Toute la Casamance</option>
-                <option>Ziguinchor</option>
-                <option>Oussouye</option>
-                <option>Cap Skirring</option>
-                <option>Kolda</option>
-                <option>Sédhiou</option>
+                <option selected>Tout le Sénégal</option>
+                <option>Dakar</option>
+                <option>Saint-Louis</option>
+                <option>Casamance</option>
+                <option>Petite Côte</option>
+                <option>Sine-Saloum</option>
+                <option>Cap Skiring</option>
               </select>
             </div>
             <div class="col-md-3">
@@ -215,6 +255,7 @@
                 <option selected>Toutes catégories</option>
                 <option>Hébergement</option>
                 <option>Activité</option>
+                <option>Site touristique</option>
                 <option>Guide local</option>
                 <option>Atelier</option>
               </select>
@@ -228,6 +269,128 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Section Destinations Populaires -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <h2 class="fw-bold mb-4">Destinations populaires au Sénégal</h2>
+        <div class="destination-grid">
+          
+          <!-- Ngaparou -->
+          <div class="destination-card">
+            <img src="../public/assets/images/ngaparou.jpg" alt="Ngaparou">
+            <div class="destination-card-content">
+              <span class="destination-type">Plage • Détente</span>
+              <h5 class="fw-bold mt-2">Ngaparou</h5>
+              <p class="text-muted">Plage tranquille et authentique, idéale pour les familles et les amoureux de la nature.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Plage</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Somone -->
+          <div class="destination-card">
+            <img src="../public/assets/images/somone.jpg" alt="Somone">
+            <div class="destination-card-content">
+              <span class="destination-type">Lagune • Nature</span>
+              <h5 class="fw-bold mt-2">Somone</h5>
+              <p class="text-muted">Magnifique lagune et réserve ornithologique, paradis pour l'observation des oiseaux.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Nature</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saly -->
+          <div class="destination-card">
+            <img src="../public/assets/images/saly.jpg" alt="Saly">
+            <div class="destination-card-content">
+              <span class="destination-type">Station balnéaire</span>
+              <h5 class="fw-bold mt-2">Saly</h5>
+              <p class="text-muted">Station balnéaire réputée avec golfs, spas et activités nautiques pour tous les goûts.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Luxe</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mbour -->
+          <div class="destination-card">
+            <img src="../public/assets/images/mbour.jpg" alt="Mbour">
+            <div class="destination-card-content">
+              <span class="destination-type">Ville côtière • Pêche</span>
+              <h5 class="fw-bold mt-2">Mbour</h5>
+              <p class="text-muted">Port de pêche animé et marché traditionnel, immersion dans la vie locale sénégalaise.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Culture</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guereo -->
+          <div class="destination-card">
+            <img src="../public/assets/images/guereo.jpg" alt="Guereo">
+            <div class="destination-card-content">
+              <span class="destination-type">Village traditionnel</span>
+              <h5 class="fw-bold mt-2">Guereo</h5>
+              <p class="text-muted">Village authentique au cœur du Sine-Saloum, expérience culturelle préservée.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Authentique</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saint-Louis -->
+          <div class="destination-card">
+            <img src="../public/assets/images/saint-louis.jpg" alt="Saint-Louis">
+            <div class="destination-card-content">
+              <span class="destination-type">Patrimoine UNESCO</span>
+              <h5 class="fw-bold mt-2">Saint-Louis</h5>
+              <p class="text-muted">Ancienne capitale de l'Afrique occidentale française, architecture coloniale préservée.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Historique</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dakar -->
+          <div class="destination-card">
+            <img src="../public/assets/images/dakar.jpg" alt="Dakar">
+            <div class="destination-card-content">
+              <span class="destination-type">Capitale • Vie urbaine</span>
+              <h5 class="fw-bold mt-2">Dakar</h5>
+              <p class="text-muted">Capitale dynamique, marché artisanal, île de Gorée et monuments historiques.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Urbain</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cap Skiring -->
+          <div class="destination-card">
+            <img src="../public/assets/images/cap-skiring.jpg" alt="Cap Skiring">
+            <div class="destination-card-content">
+              <span class="destination-type">Plage • Nature</span>
+              <h5 class="fw-bold mt-2">Cap Skiring</h5>
+              <p class="text-muted">Plages de sable fin et cocotiers en Casamance, cadre paradisiaque préservé.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-primary">Paradis</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Explorer</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -251,6 +414,10 @@
               <input class="form-check-input" type="checkbox" id="type3" checked>
               <label class="form-check-label" for="type3">Guides</label>
             </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="type4" checked>
+              <label class="form-check-label" for="type4">Sites touristiques</label>
+            </div>
           </div>
           
           <div class="mb-4">
@@ -263,9 +430,23 @@
           </div>
           
           <div class="mb-4">
-            <label class="form-label">Dates</label>
-            <input type="date" class="form-control mb-2" id="startDate">
-            <input type="date" class="form-control" id="endDate">
+            <label class="form-label">Région</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="region1">
+              <label class="form-check-label" for="region1">Dakar</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="region2">
+              <label class="form-check-label" for="region2">Saint-Louis</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="region3">
+              <label class="form-check-label" for="region3">Casamance</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="region4">
+              <label class="form-check-label" for="region4">Petite Côte</label>
+            </div>
           </div>
           
           <div class="mb-4">
@@ -291,7 +472,7 @@
       <!-- Résultats -->
       <div class="col-lg-9">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2 class="h4 fw-bold mb-0">32 résultats trouvés</h2>
+          <h2 class="h4 fw-bold mb-0">Résultats de recherche</h2>
           <div>
             <select class="form-select" style="width: auto;">
               <option selected>Trier par : Pertinence</option>
@@ -408,12 +589,12 @@
         <!-- Carte interactive -->
         <div class="card mb-4">
           <div class="card-header bg-white">
-            <h5 class="mb-0"><i class="bi bi-map me-2"></i>Carte des résultats</h5>
+            <h5 class="mb-0"><i class="bi bi-map me-2"></i>Carte du Sénégal</h5>
           </div>
           <div class="card-body p-0">
             <div class="map-container">
-              <!-- Intégration de la carte (ex: Google Maps) -->
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992248.4787824077!2d-16.987837982006596!3d12.771347662479378!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xee78a9f18770d07%3A0x1bfd8afb93bea5bf!2sCasamance!5e0!3m2!1sfr!2ssn!4v1754751342810!5m2!1sfr!2ssn" width="850" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7928338.283045428!2d-18.08383745!3d14.459859049999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xec172a8b57bb92d%3A0x5a6b2c6b3c4d5e6f!2sS%C3%A9n%C3%A9gal!5e0!3m2!1sfr!2ssn!4v1700000000000!5m2!1sfr!2ssn" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
           </div>
         </div>
         
@@ -440,12 +621,16 @@
     <div class="container py-5">
       <div class="row">
         <div class="col-lg-4 mb-4 mb-lg-0">
-          <h3 class="h5 mb-3"><img src="../assets/images/logo_casahome.png" alt="Teranga Home Logo" height="30" class="me-2">Teranga Home</h3>
-          <p>Plateforme de tourisme communautaire et solidaire en Casamance. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
+          <h3 class="h5 mb-3 d-flex align-items-center">
+            <img src="../public/assets/images/logo_casahome_white.png" alt="Teranga Home Logo" height="40" class="me-2">
+            Teranga Home
+          </h3>
+          <p>Plateforme de tourisme communautaire et solidaire au Sénégal. Nous connectons les voyageurs avec les familles d'accueil pour des expériences authentiques.</p>
           <div class="mt-4">
-            <a href="#" class="text-white me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
-            <a href="#" class="text-white me-3"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
-            <a href="#" class="text-white me-3"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3" aria-label="Facebook"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3" aria-label="Instagram"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white me-3" aria-label="Twitter"><i class="bi bi-twitter-x" style="font-size: 1.5rem;"></i></a>
+            <a href="#" class="text-white" aria-label="YouTube"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a>
           </div>
         </div>
         <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
@@ -461,19 +646,21 @@
         <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
           <h5 class="h6 mb-3">Informations</h5>
           <ul class="list-unstyled">
-            <li class="mb-2"><a href="#">À propos</a></li>
-            <li class="mb-2"><a href="#">Comment ça marche</a></li>
-            <li class="mb-2"><a href="#">Blog</a></li>
-            <li class="mb-2"><a href="#">FAQ</a></li>
+            <li class="mb-2"><a href="about.html">À propos</a></li>
+            <li class="mb-2"><a href="how-it-works.html">Comment ça marche</a></li>
+            <li class="mb-2"><a href="blog.html">Blog</a></li>
+            <li class="mb-2"><a href="faq.html">FAQ</a></li>
+            <li class="mb-2"><a href="pricing.html">Tarifs</a></li>
           </ul>
         </div>
         <div class="col-lg-3 col-md-6">
           <h5 class="h6 mb-3">Légal</h5>
           <ul class="list-unstyled">
-            <li class="mb-2"><a href="#">Conditions générales</a></li>
-            <li class="mb-2"><a href="#">Politique de confidentialité</a></li>
-            <li class="mb-2"><a href="#">Mentions légales</a></li>
-            <li class="mb-2"><a href="#">Cookies</a></li>
+            <li class="mb-2"><a href="terms.html">Conditions générales</a></li>
+            <li class="mb-2"><a href="privacy.html">Politique de confidentialité</a></li>
+            <li class="mb-2"><a href="legal.html">Mentions légales</a></li>
+            <li class="mb-2"><a href="cookies.html">Cookies</a></li>
+            <li class="mb-2"><a href="sitemap.html">Plan du site</a></li>
           </ul>
         </div>
       </div>
@@ -482,19 +669,35 @@
         <div>&copy; <span id="year"></span> Teranga Home. Tous droits réservés.</div>
         <div class="d-flex gap-3 mt-3 mt-md-0">
           <a href="#"><i class="bi bi-credit-card me-1"></i> Paiements sécurisés</a>
+          <a href="#"><i class="bi bi-shield-check me-1"></i> Sécurité des données</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Chatbot Widget (début) -->
-  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-    <img src="../assets/images/logo_casahome.png" alt="Bot" style="width:36px; height:36px; border-radius:50%;">
+  <!-- Chatbot Widget avec Lottie -->
+  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+    <dotlottie-player 
+      src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+      background="transparent" 
+      speed="1" 
+      style="width: 58px; height: 58px;" 
+      loop 
+      autoplay>
+    </dotlottie-player>
   </div>
+  
   <div id="chatbot-window" style="display:none; position: fixed; bottom: 110px; right: 32px; width:350px; max-width:90vw; height:440px; background:#fff; z-index:10000; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.17); border:1px solid #eee; overflow:hidden; flex-direction:column;">
     <div style="background:#2AA4CD; color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; align-items:center;">
-        <img src="../assets/images/logo_casahome.png" alt="Bot" style="width:32px; height:32px; border-radius:50%; margin-right:12px;">
+        <dotlottie-player 
+          src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+          background="transparent" 
+          speed="1" 
+          style="width: 32px; height: 32px; margin-right: 12px;" 
+          loop 
+          autoplay>
+        </dotlottie-player>
         <span style="font-weight:bold;">Guide Teranga</span>
       </div>
       <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
@@ -512,109 +715,228 @@
       </form>
     </div>
   </div>
-  <!-- Chatbot Widget (fin) -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Année dynamique
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // FAQ data intégrée pour la page recherche
     let chatLang = 'fr';
-    let faqData = { fr: [], en: [] };
+    let faqData = { 
+      fr: [
+        {
+          "question": "destinations senegal",
+          "answer": "Le Sénégal offre des destinations variées : Dakar (capitale dynamique), Saint-Louis (patrimoine UNESCO), la Petite Côte (plages), la Casamance (nature préservée), et le Sine-Saloum (delta et mangroves)."
+        },
+        {
+          "question": "meilleure periode visiter senegal",
+          "answer": "La meilleure période est de novembre à mai (saison sèche). Évitez la saison des pluies de juin à octobre pour profiter pleinement des activités extérieures."
+        },
+        {
+          "question": "plages senegal",
+          "answer": "Les plus belles plages : Cap Skiring (Casamance), Saly (station balnéaire), Ngaparou (authentique), Somone (lagune), et les îles du Saloum."
+        },
+        {
+          "question": "que faire dakar",
+          "answer": "À Dakar : visite de l'île de Gorée, marché artisanal de Soumbédioune, monument de la Renaissance, musées, et plages de N'Gor et Yoff."
+        },
+        {
+          "question": "saint louis que voir",
+          "answer": "À Saint-Louis : ville historique classée UNESCO, pont Faidherbe, architecture coloniale, parc national de la Langue de Barbarie, et festival de jazz annuel."
+        },
+        {
+          "question": "cap skiring",
+          "answer": "Cap Skiring en Casamance : plages paradisiaques, forêts de palmiers, ambiance détendue. Idéal pour les amateurs de nature et de tranquillité."
+        },
+        {
+          "question": "petite cote senegal",
+          "answer": "La Petite Côte : région côtière avec Saly, Mbour, Somone, Ngaparou. Plages, sports nautiques, golfs, et hébergements de tout type."
+        },
+        {
+          "question": "sine saloum",
+          "answer": "Le delta du Sine-Saloum : mangroves, bolongs (chenaux), villages sur pilotis, observation d'oiseaux, et écolodges authentiques."
+        },
+        {
+          "question": "comment se deplacer senegal",
+          "answer": "Transports : taxis en ville, cars interurbains, location de voiture avec chauffeur recommandée. Vols intérieurs pour la Casamance."
+        },
+        {
+          "question": "hebergement senegal",
+          "answer": "Hébergements variés : hôtels de luxe à Dakar et Saly, auberges, campements écologiques, et maisons d'hôtes chez l'habitant pour une immersion authentique."
+        }
+      ],
+      en: [
+        {
+          "question": "senegal destinations",
+          "answer": "Senegal offers varied destinations: Dakar (dynamic capital), Saint-Louis (UNESCO heritage), Petite Côte (beaches), Casamance (preserved nature), and Sine-Saloum (delta and mangroves)."
+        },
+        {
+          "question": "best time visit senegal",
+          "answer": "The best period is from November to May (dry season). Avoid the rainy season from June to October to fully enjoy outdoor activities."
+        },
+        {
+          "question": "senegal beaches",
+          "answer": "Most beautiful beaches: Cap Skiring (Casamance), Saly (seaside resort), Ngaparou (authentic), Somone (lagoon), and Saloum islands."
+        }
+      ]
+    };
+
+    // Éléments DOM
     const bubble = document.getElementById('chatbot-bubble');
     const windowEl = document.getElementById('chatbot-window');
     const closeBtn = document.getElementById('chatbot-close');
     const form = document.getElementById('chatbot-form');
     const input = document.getElementById('chatbot-input');
     const messages = document.getElementById('chatbot-messages');
-    async function loadFaq(lang) {
-      if (faqData[lang].length > 0) return;
-      const file = lang === 'fr' ? '../data/faq_fr.json' : '../data/faq_en.json';
-      try {
-        const res = await fetch(file);
-        if (res.ok) {
-          faqData[lang] = await res.json();
-        }
-      } catch (err) { }
-    }
-    bubble.onclick = async () => {
+
+    // Gestionnaires d'événements
+    bubble.onclick = () => {
       windowEl.style.display = 'flex';
       bubble.style.display = 'none';
-      await loadFaq(chatLang);
       showWelcome();
     };
+
     closeBtn.onclick = () => {
       windowEl.style.display = 'none';
       bubble.style.display = 'flex';
     };
+
     function setChatLang(lang) {
       chatLang = lang;
-      loadFaq(lang);
       showWelcome();
     }
+
     function showWelcome() {
       messages.innerHTML = '';
       addBotMsg(chatLang === 'fr'
-        ? '👋 Bonjour, je suis votre Guide Teranga ! Posez-moi vos questions sur le Sénégal (itinéraires, hébergements, culture...). Vous pouvez aussi utiliser le menu rapide.'
-        : '👋 Hello, I am your Teranga Guide! Ask me about Senegal (routes, accommodation, culture...). You can also use the quick menu.');
+        ? '👋 Bonjour ! Je suis votre Guide Teranga. Posez-moi vos questions sur les destinations au Sénégal, les activités, ou utilisez le menu rapide !'
+        : '👋 Hello! I am your Teranga Guide. Ask me about destinations in Senegal, activities, or use the quick menu!');
     }
+
     function showFAQMenu() {
       addBotMsg(chatLang === 'fr'
-        ? '<b>Menu rapide</b><ul><li>Destinations touristiques</li><li>Hébergement</li><li>Météo</li><li>Culture & événements</li><li>Conseils pratiques</li></ul>'
-        : '<b>Quick Menu</b><ul><li>Touristic destinations</li><li>Accommodation</li><li>Weather</li><li>Culture & events</li><li>Practical tips</li></ul>'
+        ? '<b>📋 Menu rapide</b><br>• Destinations touristiques<br>• Meilleure période de visite<br>• Hébergements<br>• Activités et excursions<br>• Transports<br>• Conseils pratiques'
+        : '<b>📋 Quick Menu</b><br>• Tourist destinations<br>• Best time to visit<br>• Accommodation<br>• Activities and excursions<br>• Transportation<br>• Practical tips'
       );
     }
+
     function addBotMsg(text) {
       const msg = document.createElement('div');
       msg.style = 'margin:8px 0; text-align:left;';
-      msg.innerHTML = `<span style='background:#E6F4F9; color:#2AA4CD; padding:7px 14px; border-radius:16px 16px 16px 6px; display:inline-block; max-width:90%;'>` + text + "</span>";
+      msg.innerHTML = `<span style='background:#E6F4F9; color:#2AA4CD; padding:7px 14px; border-radius:16px 16px 16px 6px; display:inline-block; max-width:90%;'>${text}</span>`;
       messages.appendChild(msg);
       messages.scrollTop = messages.scrollHeight;
     }
+
     function addUserMsg(text) {
       const msg = document.createElement('div');
       msg.style = 'margin:8px 0; text-align:right;';
-      msg.innerHTML = `<span style='background:#EB6F27; color:#fff; padding:7px 14px; border-radius:16px 16px 6px 16px; display:inline-block; max-width:90%;'>` + text + "</span>";
+      msg.innerHTML = `<span style='background:#EB6F27; color:#fff; padding:7px 14px; border-radius:16px 16px 6px 16px; display:inline-block; max-width:90%;'>${text}</span>`;
       messages.appendChild(msg);
       messages.scrollTop = messages.scrollHeight;
     }
+
+    // Normalisation du texte pour la recherche
     function normalizeTxt(str) {
-      return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').trim();
+      return str.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
+
+    // Recherche améliorée dans la FAQ
     function faqMatch(question, lang) {
       const userQ = normalizeTxt(question);
-      let maxScore = 0;
-      let best = null;
+      
+      // Recherche exacte d'abord
       for (const faq of faqData[lang]) {
-        const faqQ = normalizeTxt(faq.question);
-        let score = 0;
-        for (const word of userQ.split(' ')) {
-          if (faqQ.includes(word) && word.length > 2) score++;
-        }
-        if (score > maxScore) {
-          maxScore = score;
-          best = faq;
+        if (normalizeTxt(faq.question).includes(userQ) || userQ.includes(normalizeTxt(faq.question))) {
+          return faq;
         }
       }
-      if (maxScore >= 2) return best;
-      return null;
+      
+      // Recherche par mots-clés
+      let bestMatch = null;
+      let bestScore = 0;
+      
+      for (const faq of faqData[lang]) {
+        const faqQ = normalizeTxt(faq.question);
+        const userWords = userQ.split(' ');
+        const faqWords = faqQ.split(' ');
+        
+        let score = 0;
+        for (const userWord of userWords) {
+          if (userWord.length > 3) {
+            for (const faqWord of faqWords) {
+              if (faqWord.includes(userWord) || userWord.includes(faqWord)) {
+                score += userWord.length;
+                break;
+              }
+            }
+          }
+        }
+        
+        if (score > bestScore && score > 2) {
+          bestScore = score;
+          bestMatch = faq;
+        }
+      }
+      
+      return bestMatch;
     }
-    form.onsubmit = async (e) => {
+
+    // Gestion du formulaire
+    form.onsubmit = (e) => {
       e.preventDefault();
       const txt = input.value.trim();
       if (!txt) return;
+      
       addUserMsg(txt);
       input.value = '';
-      await loadFaq(chatLang);
-      const reply = faqMatch(txt, chatLang);
-      if (reply) {
-        addBotMsg(reply.answer);
-      } else {
-        addBotMsg(chatLang === 'fr' ?
-          "Je n'ai pas trouvé la réponse dans ma FAQ locale. Prochaine étape : connexion à l'intelligence OpenAI ! 😊"
-          : "I couldn’t find the answer in my local FAQ. Next step: connection to OpenAI intelligence! 😊");
-      }
+      
+      // Simulation de délai de traitement
+      setTimeout(() => {
+        const reply = faqMatch(txt, chatLang);
+        
+        if (reply) {
+          addBotMsg(reply.answer);
+        } else {
+          // Réponses intelligentes par défaut
+          const lowerTxt = txt.toLowerCase();
+          
+          if (lowerTxt.includes('bonjour') || lowerTxt.includes('hello') || lowerTxt.includes('salut')) {
+            addBotMsg(chatLang === 'fr' ? 
+              "Bonjour ! 😊 Je suis ravi de vous aider à découvrir le Sénégal. Posez-moi vos questions sur les destinations, les activités ou les hébergements !" :
+              "Hello! 😊 I'm happy to help you discover Senegal. Ask me about destinations, activities or accommodation!");
+          } 
+          else if (lowerTxt.includes('merci') || lowerTxt.includes('thank')) {
+            addBotMsg(chatLang === 'fr' ?
+              "Avec plaisir ! N'hésitez pas si vous avez d'autres questions sur le Sénégal. Bon voyage ! 🌴" :
+              "You're welcome! Feel free to ask if you have other questions about Senegal. Have a great trip! 🌴");
+          }
+          else if (lowerTxt.includes('plage') || lowerTxt.includes('beach')) {
+            addBotMsg(chatLang === 'fr' ?
+              "🏖️ Les plus belles plages du Sénégal : Cap Skiring (paradisiaque), Saly (animée), Ngaparou (authentique), Somone (lagune), et les îles du Saloum (sauvages)." :
+              "🏖️ Most beautiful beaches in Senegal: Cap Skiring (paradise), Saly (lively), Ngaparou (authentic), Somone (lagoon), and Saloum islands (wild).");
+          }
+          else if (lowerTxt.includes('ville') || lowerTxt.includes('city') || lowerTxt.includes('dakar') || lowerTxt.includes('saint louis')) {
+            addBotMsg(chatLang === 'fr' ?
+              "🏙️ Principales villes : Dakar (capitale dynamique), Saint-Louis (patrimoine UNESCO), Ziguinchor (Casamance), et Mbour (port de pêche)." :
+              "🏙️ Main cities: Dakar (dynamic capital), Saint-Louis (UNESCO heritage), Ziguinchor (Casamance), and Mbour (fishing port).");
+          }
+          else {
+            addBotMsg(chatLang === 'fr' ?
+              "Je suis spécialisé sur les destinations touristiques au Sénégal. Posez-moi des questions sur :<br>• Les régions et villes<br>• Les plages et sites naturels<br>• Les activités culturelles<br>• Les hébergements<br>• Les transports" :
+              "I specialize in tourist destinations in Senegal. Ask me about:<br>• Regions and cities<br>• Beaches and natural sites<br>• Cultural activities<br>• Accommodation<br>• Transportation");
+          }
+        }
+      }, 800);
     }
-    loadFaq(chatLang).then(() => showWelcome());
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialisation
+    showWelcome();
   </script>
 </body>
 </html>

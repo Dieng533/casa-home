@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="./public/assets/images/logo_casahome.png" type="image/x-icon">
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
   <style>
     :root {
       --primary-blue: #2AA4CD;
@@ -219,7 +220,7 @@
       <div class="container py-5">
         <div class="row align-items-center">
           <div class="col-lg-7">
-            <h1 class="display-4 fw-bold mb-3">Découvrez la Casamance authentique</h1>
+            <h1 class="display-4 fw-bold mb-3">Découvrez le Sénégal authentique</h1>
             <p class="lead mb-4">Plateforme de tourisme communautaire et solidaire. Vivez une expérience immersive chez l'habitant et participez au développement local.</p>
             <div class="d-flex gap-3">
               <a href="#services" class="btn btn-primary btn-lg px-4"><i class="bi bi-map me-2"></i>Explorer</a>
@@ -476,13 +477,23 @@
   </script>
 
   <!-- Chatbot Widget (début) -->
-  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-    <img src="public/assets/images/logo_casahome.png" alt="Bot" style="width:36px; height:36px; border-radius:50%;">
+  <div id="chatbot-bubble" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #2AA4CD; border-radius: 50px; box-shadow: 0 4px 16px rgba(0,0,0,.1); width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <dotlottie-wc 
+      src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+      style="width: 58px; height: 58px;" 
+      autoplay 
+      loop>
+    </dotlottie-wc>
   </div>
   <div id="chatbot-window" style="display:none; position: fixed; bottom: 110px; right: 32px; width:350px; max-width:90vw; height:440px; background:#fff; z-index:10000; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.17); border:1px solid #eee; overflow:hidden; flex-direction:column;">
     <div style="background:#2AA4CD; color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; align-items:center;">
-        <img src="public/assets/images/logo_casahome.png" alt="Bot" style="width:32px; height:32px; border-radius:50%; margin-right:12px;">
+        <dotlottie-wc 
+          src="https://lottie.host/d63e8e4e-633b-49e6-a2b1-d4cb02b9229f/uuRubT9e46.lottie" 
+          style="width: 32px; height: 32px; margin-right:12px;" 
+          autoplay 
+          loop>
+        </dotlottie-wc>
         <span style="font-weight:bold;">Guide Teranga</span>
       </div>
       <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
